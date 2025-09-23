@@ -10,7 +10,6 @@ export default defineSchema({
     amount: v.number(),
     imageUrl: v.string(),
     owner: v.id("users"),
-    createdAt: v.number(),
     updatedAt: v.number(),
   }),
   grants: defineTable({
@@ -19,7 +18,6 @@ export default defineSchema({
     amount: v.number(),
     status: v.union(v.literal("pending"), v.literal("completed")),
     paymentMethod: v.string(),
-    createdAt: v.number(),
     updatedAt: v.number(),
   }),
 });
