@@ -32,10 +32,7 @@ export default function RegisterForm({
         toast.error("Passwords do not match");
         return;
       }
-      void (await signIn("password", {
-        ...formData,
-        redirectTo: "/home",
-      }));
+      void (await signIn("password", formData));
     } catch (error) {
       toast.error("Failed to sign up");
     }
