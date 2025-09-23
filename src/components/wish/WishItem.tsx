@@ -4,7 +4,7 @@ import { Doc } from "../../../convex/_generated/dataModel";
 import Image from "next/image";
 
 interface WishItemProps {
-  wish: Doc<"wish">;
+  wish: Doc<"wishes">;
 }
 
 export default function WishItem({ wish }: WishItemProps) {
@@ -19,12 +19,7 @@ export default function WishItem({ wish }: WishItemProps) {
             className="object-contain"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <p>{wish.description}</p>
-          <p>{wish.amount}</p>
-          <p>{wish.owner}</p>
-          <p>{wish.updatedAt}</p>
-        </div>
+        <div className="flex flex-col gap-2"></div>
       </CardContent>
     </Card>
   );
