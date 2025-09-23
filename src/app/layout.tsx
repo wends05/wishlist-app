@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const albertSans = Albert_Sans({
   variable: "--font-albert-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <body className={`${albertSans.variable} antialiased`}>
           <ConvexClientProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Toaster />
               {children}
             </ThemeProvider>
           </ConvexClientProvider>
