@@ -16,6 +16,7 @@ import type {
 import type * as Password from "../Password.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as users from "../users.js";
 import type * as wish from "../wish.js";
 
 /**
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   Password: typeof Password;
   auth: typeof auth;
   http: typeof http;
+  users: typeof users;
   wish: typeof wish;
 }>;
 export declare const api: FilterApi<
