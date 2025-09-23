@@ -12,6 +12,7 @@ import Link from "next/link";
 import { homeLinks } from "@/utils/links";
 import { useAuthActions } from "@convex-dev/auth/react";
 import LogoutButton from "../LogoutButton";
+import { PlusCircleIcon } from "lucide-react";
 
 export default function HomeSidebar() {
   const { signOut } = useAuthActions();
@@ -33,6 +34,12 @@ export default function HomeSidebar() {
         </div>
       </SidebarContent>
       <SidebarFooter>
+        <Button variant="outline" className="hover:text-primary mx-4">
+          <Link href="/create" className="flex items-center gap-2">
+            <PlusCircleIcon />
+            Create A New Wish
+          </Link>
+        </Button>
         <LogoutButton />
       </SidebarFooter>
     </Sidebar>
