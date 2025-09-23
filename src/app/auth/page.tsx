@@ -10,9 +10,13 @@ export default function Page() {
     setIsOnLogin(!isOnLogin);
   };
 
-  return isOnLogin ? (
-    <LoginForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
-  ) : (
-    <RegisterForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
+  return (
+    <main className="flex h-screen w-screen flex-col items-center justify-center">
+      {isOnLogin ? (
+        <LoginForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
+      ) : (
+        <RegisterForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
+      )}
+    </main>
   );
 }
