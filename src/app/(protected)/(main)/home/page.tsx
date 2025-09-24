@@ -5,7 +5,7 @@ import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 
 export default async function HomePage() {
   const wishes = await preloadQuery(
-    api.wish.findWishes,
+    api.wishes.findWishes,
     {},
     {
       token: await convexAuthNextjsToken(),

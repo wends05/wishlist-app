@@ -7,7 +7,7 @@ import { Id } from "./_generated/dataModel";
 export const findWishes = query({
   args: {},
   handler: async (ctx, _args) => {
-    const wish = await ctx.db.query("wish").take(5);
+    const wish = await ctx.db.query("wishes").take(5);
     return wish;
   },
 });
@@ -16,8 +16,10 @@ export const createWish = mutation({
   args: {
     name: v.string(),
     description: v.string(),
-    amount: v.number(),
+    quantity: v.number(),
     imageUrl: v.id("_storage"),
+    category: v.id("categories"),
+    tags: v.array(v.string()),
   },
   handler: async (ctx, args) => {
     if (args.imageUrl.startsWith("http://localhost:3000/")) {
@@ -34,13 +36,16 @@ export const createWish = mutation({
       throw new Error("Failed to get image URL");
     }
 
-    const wish = await ctx.db.insert("wish", {
+    const wish = await ctx.db.insert("wishes", {
       name: args.name,
       description: args.description,
-      amount: args.amount,
+      quantity: args.quantity,
+      category: args.category,
       imageUrl: receivedStorageUrl,
       owner: userId,
       updatedAt: Date.now(),
+      tags: args.tags,
+      
     });
     return wish;
   },
