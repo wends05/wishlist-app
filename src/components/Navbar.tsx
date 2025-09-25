@@ -5,7 +5,7 @@ import { rootLinks } from "@/utils/links";
 
 const Navbar = () => {
   return (
-    <ul className="sticky flex justify-between p-4">
+    <ul className="fixed w-full flex justify-between p-4">
       <li>
         <Button variant={"ghost"}>
           <Link href="/">Wishlist App</Link>

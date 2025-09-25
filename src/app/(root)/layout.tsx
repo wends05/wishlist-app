@@ -6,7 +6,7 @@ const layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="min-h-screen bg-neutral-700 p-2">{children}</div>
       <Footer />
     </>
   );
