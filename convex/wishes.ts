@@ -1,13 +1,24 @@
 import { v } from "convex/values";
 import { mutation, query, QueryCtx } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
-import { api } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
+import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
 
 export const findWishes = query({
   args: {},
   handler: async (ctx, _args) => {
+    await checkUserIdentity(ctx);
     const wish = await ctx.db.query("wishes").take(5);
+    return wish;
+  },
+});
+
+export const findWishById = query({
+  args: {
+    id: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    await checkUserIdentity(ctx);
+    const wish = await ctx.db.get(args.id);
     return wish;
   },
 });
@@ -17,23 +28,21 @@ export const createWish = mutation({
     name: v.string(),
     description: v.string(),
     quantity: v.number(),
-    imageUrl: v.id("_storage"),
+    imageId: v.optional(v.id("_storage")),
     category: v.id("categories"),
-    tags: v.array(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.imageUrl.startsWith("http://localhost:3000/")) {
-      throw new Error("Invalid image URL");
-    }
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
+    const user = await getCurrentUserDataHandler(ctx);
+    if (!user) {
       throw new Error("Unauthorized");
     }
 
-    const receivedStorageUrl = await getImageURL(ctx, args.imageUrl);
-
-    if (!receivedStorageUrl) {
-      throw new Error("Failed to get image URL");
+    let receivedStorageUrl: string | null = null;
+    if (args.imageId) {
+      receivedStorageUrl = await getImageURL(ctx, args.imageId);
+      if (!receivedStorageUrl) {
+        throw new Error("Failed to get image URL");
+      }
     }
 
     const wish = await ctx.db.insert("wishes", {
@@ -41,11 +50,9 @@ export const createWish = mutation({
       description: args.description,
       quantity: args.quantity,
       category: args.category,
-      imageUrl: receivedStorageUrl,
-      owner: userId,
+      imageUrl: receivedStorageUrl ?? "",
+      owner: user._id,
       updatedAt: Date.now(),
-      tags: args.tags,
-      
     });
     return wish;
   },
@@ -54,12 +61,14 @@ export const createWish = mutation({
 export const generateUploadURL = mutation({
   args: {},
   handler: async (ctx, _args) => {
+    await checkUserIdentity(ctx);
     const url = await ctx.storage.generateUploadUrl();
     return url;
   },
 });
 
 const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
+  await checkUserIdentity(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };
