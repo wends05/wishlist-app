@@ -7,7 +7,7 @@ import { getRouteTitle, homeLinks } from "@/utils/links";
 const HomeHeader = () => {
   const pathName = usePathname();
   return (
-    <main className="flex items-center gap-4 py-2">
+    <main className="flex items-center gap-4 py-2 fixed px-3">
       <SidebarTrigger /> <h3>{getRouteTitle(pathName, homeLinks)}</h3>
     </main>
   );
