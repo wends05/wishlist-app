@@ -17,23 +17,25 @@ export const createWish = mutation({
     name: v.string(),
     description: v.string(),
     quantity: v.number(),
-    imageUrl: v.id("_storage"),
+    imageId: v.optional(v.id("_storage")),
     category: v.id("categories"),
-    tags: v.array(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.imageUrl.startsWith("http://localhost:3000/")) {
-      throw new Error("Invalid image URL");
-    }
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("Unauthorized");
     }
 
-    const receivedStorageUrl = await getImageURL(ctx, args.imageUrl);
+    if (!args.category) {
+      args.category = "" as Id<"categories">;
+    }
 
-    if (!receivedStorageUrl) {
-      throw new Error("Failed to get image URL");
+    let receivedStorageUrl: string | null = null;
+    if (args.imageId) {
+      receivedStorageUrl = await getImageURL(ctx, args.imageId);
+      if (!receivedStorageUrl) {
+        throw new Error("Failed to get image URL");
+      }
     }
 
     const wish = await ctx.db.insert("wishes", {
@@ -41,11 +43,9 @@ export const createWish = mutation({
       description: args.description,
       quantity: args.quantity,
       category: args.category,
-      imageUrl: receivedStorageUrl,
+      imageUrl: receivedStorageUrl ?? "",
       owner: userId,
       updatedAt: Date.now(),
-      tags: args.tags,
-      
     });
     return wish;
   },

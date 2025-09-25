@@ -18,10 +18,9 @@ export default defineSchema({
     description: v.string(),
     quantity: v.number(),
     category: v.id("categories"),
-    imageUrl: v.string(),
+    imageUrl: v.optional(v.string()),
     owner: v.id("users"),
     updatedAt: v.number(),
-    tags: v.array(v.string()),
   })
     .index("owner", ["owner"])
     .index("category", ["category"])
