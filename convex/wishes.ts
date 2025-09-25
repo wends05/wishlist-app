@@ -1,13 +1,24 @@
 import { v } from "convex/values";
 import { mutation, query, QueryCtx } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
-import { api } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
+import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
 
 export const findWishes = query({
   args: {},
   handler: async (ctx, _args) => {
+    await checkUserIdentity(ctx);
     const wish = await ctx.db.query("wishes").take(5);
+    return wish;
+  },
+});
+
+export const findWishById = query({
+  args: {
+    id: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    await checkUserIdentity(ctx);
+    const wish = await ctx.db.get(args.id);
     return wish;
   },
 });
@@ -21,13 +32,9 @@ export const createWish = mutation({
     category: v.id("categories"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
+    const user = await getCurrentUserDataHandler(ctx);
+    if (!user) {
       throw new Error("Unauthorized");
-    }
-
-    if (!args.category) {
-      args.category = "" as Id<"categories">;
     }
 
     let receivedStorageUrl: string | null = null;
@@ -44,7 +51,7 @@ export const createWish = mutation({
       quantity: args.quantity,
       category: args.category,
       imageUrl: receivedStorageUrl ?? "",
-      owner: userId,
+      owner: user._id,
       updatedAt: Date.now(),
     });
     return wish;
@@ -54,12 +61,14 @@ export const createWish = mutation({
 export const generateUploadURL = mutation({
   args: {},
   handler: async (ctx, _args) => {
+    await checkUserIdentity(ctx);
     const url = await ctx.storage.generateUploadUrl();
     return url;
   },
 });
 
 const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
+  await checkUserIdentity(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };

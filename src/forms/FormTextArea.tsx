@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import { useFieldContext } from "./CreateWishForm";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -10,12 +10,14 @@ interface FormTextBoxProps {
 
 export default function FormTextArea({ label, placeholder }: FormTextBoxProps) {
   const value = useFieldContext<string>();
+  const id = useId();
+
   return (
     <div className="space-y-2">
-      <Label htmlFor={label}>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <div className="space-y-1">
         <Textarea
-          id={label}
+          id={id}
           value={value.state.value}
           onChange={(e) => {
             value.handleChange(e.target.value);

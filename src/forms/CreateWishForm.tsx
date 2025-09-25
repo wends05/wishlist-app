@@ -12,13 +12,12 @@ import FormSubmit from "./FormSubmit";
 import FormTextArea from "./FormTextArea";
 
 const defaultWish: CreateWishForm = {
-  category: "" as Id<"categories">,
+  category: undefined as any,
   description: "",
   name: "",
   quantity: 1,
   localImageURL: undefined,
 };
-
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
 
@@ -59,11 +58,12 @@ export const useCreateWishForm = () => {
         }
 
         // handle image upload
-        const sendURL = await generateUploadURL();
-
         let imageId: Id<"_storage"> | undefined = undefined;
 
         if (value.localImageURL) {
+          // handle image upload
+          const sendURL = await generateUploadURL();
+
           const imageFile = await fetch(value.localImageURL).then((res) =>
             res.blob(),
           );
@@ -78,10 +78,13 @@ export const useCreateWishForm = () => {
             throw new Error("Failed to send image");
           }
 
-          const { storageId } = await response.json();
+          const responseData = await response.json();
+          if (!responseData.storageId) {
+            throw new Error("Invalid upload response");
+          }
+          const { storageId } = responseData;
           imageId = storageId;
         }
-
         // handle category finding
         const categoryId = categories.find(
           (category) => category.name === value.category,

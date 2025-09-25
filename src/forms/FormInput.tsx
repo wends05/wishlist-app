@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute } from "react";
+import React, { HTMLInputTypeAttribute, useId } from "react";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { useFieldContext } from "./CreateWishForm";
@@ -10,27 +10,28 @@ interface FormInputProps {
 
 export default function FormInput({ label, type = "text" }: FormInputProps) {
   const field = useFieldContext<number | string>();
+  const id = useId();
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={label}>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <div className="space-y-1">
         <Input
-          id={label}
+          id={id}
           value={field.state.value}
           onChange={(e) => {
             if (!e.target.value) {
               field.handleChange("");
+              return;
             }
 
             if (type == "number") {
-              if (e.target.valueAsNumber.toString().includes("e")) {
-                field.handleChange(
-                  e.target.valueAsNumber.toString().split("e")[0],
-                );
-              } else {
-                field.handleChange(e.target.valueAsNumber);
+              const numValue = e.target.valueAsNumber;
+              if (isNaN(numValue)) {
+                field.handleChange("");
+                return;
               }
+              field.handleChange(numValue);
             } else {
               field.handleChange(e.target.value);
             }
