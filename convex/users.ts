@@ -10,7 +10,7 @@ export const getCurrentUserDataHandler = async (ctx: QueryCtx) => {
 
   const user = await ctx.db.get(userId);
 
-  return user;
+  return user!;
 };
 
 export const getCurrentUserData = query({

@@ -1,20 +1,12 @@
-import { preloadQuery } from "convex/nextjs";
-import { api } from "@/../convex/_generated/api";
 import WishList from "@/components/home/WishList";
-import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
+import HomePageStart from "@/components/home/HomePageStart";
 
-export default async function HomePage() {
-  const wishes = await preloadQuery(
-    api.wishes.findWishes,
-    {},
-    {
-      token: await convexAuthNextjsToken(),
-    },
-  );
+export default  function HomePage() {
 
   return (
-    <div>
-      <WishList preloadedWishes={wishes} />
-    </div>
+    <>
+      <HomePageStart />
+      <WishList />
+    </>
   );
 }
