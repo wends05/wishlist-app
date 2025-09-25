@@ -13,20 +13,38 @@ export default defineSchema({
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
   }).index("email", ["email"]),
-  wish: defineTable({
+  wishes: defineTable({
     name: v.string(),
     description: v.string(),
-    amount: v.number(),
-    imageUrl: v.string(),
+    quantity: v.number(),
+    category: v.id("categories"),
+    imageUrl: v.optional(v.string()),
     owner: v.id("users"),
     updatedAt: v.number(),
-  }),
+  })
+    .index("owner", ["owner"])
+    .index("category", ["category"])
+    .index("owner_updated", ["owner", "updatedAt"])
+    .index("name", ["name"]),
   grants: defineTable({
     wish: v.id("wishes"),
     grantor: v.id("users"),
-    amount: v.number(),
-    status: v.union(v.literal("pending"), v.literal("completed")),
-    paymentMethod: v.string(),
+    quantityGranted: v.number(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("completed"),
+      v.literal("cancelled"),
+    ),
     updatedAt: v.number(),
-  }),
+  })
+    .index("wish", ["wish"])
+    .index("grantor", ["grantor"])
+    .index("wish_status", ["wish", "status"])
+    .index("grantor_updated", ["grantor", "updatedAt"]),
+  categories: defineTable({
+    name: v.string(),
+    description: v.string(),
+    icon: v.string(),
+    updatedAt: v.number(),
+  }).index("name", ["name"]),
 });
