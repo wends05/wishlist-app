@@ -18,8 +18,24 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "info",
+          "options": {
+            "functions": ["cn", "clsx"]
+          }
+        }
+      },
       "suspicious": {
         "noUnknownAtRules": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": {
+          "fix": "safe",
+          "level": "info",
+          "options": {}
+        }
       }
     },
     "domains": {
