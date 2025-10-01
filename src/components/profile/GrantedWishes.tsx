@@ -1,7 +1,9 @@
-import React from 'react'
+import { Card, CardContent } from "../ui/card";
 
 export default function GrantedWishes() {
   return (
-    <div>GrantedWishes</div>
-  )
+    <Card>
+      <CardContent>Granted Wishes</CardContent>
+    </Card>
+  );
 }

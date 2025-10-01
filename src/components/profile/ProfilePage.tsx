@@ -1,10 +1,9 @@
-import React from "react";
-import ProfileHeader from "./ProfileHeader";
 import MyWishes from "./MyWishes";
+import ProfileHeader from "./ProfileHeader";
 
 export default function ProfilePage() {
   return (
-    <div>
+    <div className="h-full pt-14 md:px-20">
       <ProfileHeader />
       <MyWishes />
     </div>

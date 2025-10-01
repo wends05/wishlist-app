@@ -1,8 +1,10 @@
-import { v } from "convex/values";
-import { mutation, query, QueryCtx } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
-import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
+import { stat } from "node:fs/promises";
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
+import { v } from "convex/values";
+import type { Doc, Id } from "./_generated/dataModel";
+import { mutation, type QueryCtx, query } from "./_generated/server";
+import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
 
 /**
  * Queries
@@ -22,7 +24,8 @@ export const findWishesOnHomePage = query({
     await checkUserIdentity(ctx);
     const wishResults = await ctx.db
       .query("wishes")
-      .withIndex("by_creation_time").order("desc")
+      .withIndex("by_creation_time")
+      .order("desc")
       .paginate(args.paginationOpts);
 
     return {
@@ -56,6 +59,47 @@ export const findWishById = query({
     await checkUserIdentity(ctx);
     const wish = await ctx.db.get(args.id);
     return wish;
+  },
+});
+
+export const getUserWishesWithoutGrants = query({
+  args: {},
+  handler: async (ctx, _args) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const wishes = await getUserWishesByStatus(ctx);
+
+    return wishes;
+  },
+});
+
+export const getPendingWishes = query({
+  args: {},
+  handler: async (ctx, _args) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return await getUserWishesByStatus(ctx, "pending");
+  },
+});
+
+export const getGrantedWishes = query({
+  args: {},
+  handler: async (ctx, _args) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return await getUserWishesByStatus(ctx, "completed");
   },
 });
 
@@ -113,4 +157,46 @@ const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
   await checkUserIdentity(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
+};
+
+const getUserWishes = async (ctx: QueryCtx) => {
+  const userId = await getAuthUserId(ctx);
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const userWishes = await ctx.db
+    .query("wishes")
+    .withIndex("owner_updated", (q) => q.eq("owner", userId))
+    .order("desc")
+    .collect();
+  return userWishes;
+};
+
+const getUserWishesByStatus = async (
+  ctx: QueryCtx,
+  status?: Doc<"grants">["status"],
+) => {
+  const userWishes = await getUserWishes(ctx);
+  const filteredWishes = await Promise.all(
+    status
+      ? userWishes.map(async (wish) => {
+          const hasGrantByStatus = await ctx.db
+            .query("grants")
+            .withIndex("wish_status", (q) =>
+              q.eq("wish", wish._id).eq("status", status),
+            )
+            .first();
+          return hasGrantByStatus ? wish : null;
+        })
+      : userWishes.map(async (wish) => {
+          const anyGrant = await ctx.db
+            .query("grants")
+            .withIndex("wish_status", (q) => q.eq("wish", wish._id))
+            .first();
+          return anyGrant ? null : wish;
+        }),
+  );
+  return filteredWishes.filter(Boolean);
 };
