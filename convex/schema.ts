@@ -12,39 +12,31 @@ export default defineSchema({
     phone: v.optional(v.string()),
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
-  }).index("email", ["email"]),
+  }).index("by_email", ["email"]),
   wishes: defineTable({
     name: v.string(),
     description: v.string(),
-    quantity: v.number(),
     category: v.id("categories"),
     imageUrl: v.optional(v.string()),
     owner: v.id("users"),
     updatedAt: v.number(),
-  })
-    .index("owner", ["owner"])
-    .index("category", ["category"])
-    .index("owner_updated", ["owner", "updatedAt"])
-    .index("name", ["name"]),
-  grants: defineTable({
-    wish: v.id("wishes"),
-    grantor: v.id("users"),
-    quantityGranted: v.number(),
-    status: v.union(
-      v.literal("pending"),
-      v.literal("completed"),
-      v.literal("cancelled"),
+    grantor: v.optional(v.id("users")),
+    status: v.optional(
+      v.union(
+        v.literal("pending"),
+        v.literal("completed"),
+        v.literal("cancelled"),
+      ),
     ),
-    updatedAt: v.number(),
   })
-    .index("wish", ["wish"])
-    .index("grantor", ["grantor"])
-    .index("wish_status", ["wish", "status"])
-    .index("grantor_updated", ["grantor", "updatedAt"]),
+    .index("by_owner", ["owner"])
+    .index("by_category", ["category"])
+    .index("by_owner_updated", ["owner", "updatedAt"])
+    .index("by_name", ["name"]),
   categories: defineTable({
     name: v.string(),
     description: v.string(),
     icon: v.string(),
     updatedAt: v.number(),
-  }).index("name", ["name"]),
+  }).index("by_name", ["name"]),
 });

@@ -1,8 +1,15 @@
-import { v } from "convex/values";
-import { mutation, query, QueryCtx } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
-import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
+import { getAuthUserId } from "@convex-dev/auth/server";
+import { faker } from "@faker-js/faker";
 import { paginationOptsValidator } from "convex/server";
+import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
+import {
+  internalMutation,
+  mutation,
+  type QueryCtx,
+  query,
+} from "./_generated/server";
+import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
 
 /**
  * Queries
@@ -22,7 +29,8 @@ export const findWishesOnHomePage = query({
     await checkUserIdentity(ctx);
     const wishResults = await ctx.db
       .query("wishes")
-      .withIndex("by_creation_time").order("desc")
+      .withIndex("by_creation_time")
+      .order("desc")
       .paginate(args.paginationOpts);
 
     return {
@@ -66,7 +74,6 @@ export const createWish = mutation({
   args: {
     name: v.string(),
     description: v.string(),
-    quantity: v.number(),
     imageId: v.optional(v.id("_storage")),
     category: v.id("categories"),
   },
@@ -87,7 +94,6 @@ export const createWish = mutation({
     const wish = await ctx.db.insert("wishes", {
       name: args.name,
       description: args.description,
-      quantity: args.quantity,
       category: args.category,
       imageUrl: receivedStorageUrl ?? "",
       owner: user._id,
@@ -114,3 +120,25 @@ const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };
+
+/**
+ * Seeding
+ */
+
+export const seedWishes = internalMutation({
+  args: {
+    amount: v.number(),
+  },
+  handler: async (ctx, args) => {
+    for (let i = 0; i < args.amount; i++) {
+      ctx.db.insert("wishes", {
+        name: faker.commerce.product(),
+        category: "k9722ksm8g7p4997gq4g5yy47h7r9ast" as Id<"categories">,
+        imageUrl: faker.image.urlPicsumPhotos(),
+        owner: "j57fn8303afyyzgydhw9v8vpnd7r4cs3" as Id<"users">,
+        updatedAt: Date.now(),
+        description: faker.lorem.sentences(3),
+      });
+    }
+  },
+});

@@ -9,13 +9,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "wonderful-wildcat-448.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "/**",
+      },
     ],
   },
-  allowedDevOrigins: [
-    process.env.CLIENT_ORIGIN!,
-  ],
+  allowedDevOrigins: [process.env.CLIENT_ORIGIN!],
   crossOrigin: "anonymous",
-
 };
 
 export default nextConfig;
