@@ -28,17 +28,10 @@
         }
       },
       "style": {
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
         "noUnknownAtRules": "off"
-      },
-      "correctness": {
-        "noUnusedVariables": {
-          "fix": "safe",
-          "level": "info",
-          "options": {}
-        }
       }
     },
     "domains": {
