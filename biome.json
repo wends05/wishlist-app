@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!_generated",
+      "!*.lock"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -28,17 +36,10 @@
         }
       },
       "style": {
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
         "noUnknownAtRules": "off"
-      },
-      "correctness": {
-        "noUnusedVariables": {
-          "fix": "safe",
-          "level": "info",
-          "options": {}
-        }
       }
     },
     "domains": {

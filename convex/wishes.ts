@@ -1,9 +1,14 @@
-import { stat } from "node:fs/promises";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { faker } from "@faker-js/faker";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
-import { mutation, type QueryCtx, query } from "./_generated/server";
+import {
+  internalMutation,
+  mutation,
+  type QueryCtx,
+  query,
+} from "./_generated/server";
 import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
 
 /**
@@ -110,7 +115,6 @@ export const createWish = mutation({
   args: {
     name: v.string(),
     description: v.string(),
-    quantity: v.number(),
     imageId: v.optional(v.id("_storage")),
     category: v.id("categories"),
   },
@@ -131,7 +135,6 @@ export const createWish = mutation({
     const wish = await ctx.db.insert("wishes", {
       name: args.name,
       description: args.description,
-      quantity: args.quantity,
       category: args.category,
       imageUrl: receivedStorageUrl ?? "",
       owner: user._id,
@@ -168,7 +171,7 @@ const getUserWishes = async (ctx: QueryCtx) => {
 
   const userWishes = await ctx.db
     .query("wishes")
-    .withIndex("owner_updated", (q) => q.eq("owner", userId))
+    .withIndex("by_owner_updated", (q) => q.eq("owner", userId))
     .order("desc")
     .collect();
   return userWishes;
@@ -176,27 +179,38 @@ const getUserWishes = async (ctx: QueryCtx) => {
 
 const getUserWishesByStatus = async (
   ctx: QueryCtx,
-  status?: Doc<"grants">["status"],
+  status?: Doc<"wishes">["status"],
 ) => {
   const userWishes = await getUserWishes(ctx);
   const filteredWishes = await Promise.all(
-    status
-      ? userWishes.map(async (wish) => {
-          const hasGrantByStatus = await ctx.db
-            .query("grants")
-            .withIndex("wish_status", (q) =>
-              q.eq("wish", wish._id).eq("status", status),
-            )
-            .first();
-          return hasGrantByStatus ? wish : null;
-        })
-      : userWishes.map(async (wish) => {
-          const anyGrant = await ctx.db
-            .query("grants")
-            .withIndex("wish_status", (q) => q.eq("wish", wish._id))
-            .first();
-          return anyGrant ? null : wish;
-        }),
+    userWishes.map(async (wish) => {
+      const anyGrant = await ctx.db
+        .query("wishes")
+        .withIndex("by_status", (q) => q.eq("status", status))
+        .first();
+      return anyGrant ? null : wish;
+    }),
   );
   return filteredWishes.filter(Boolean);
 };
+/**
+ * Seeding
+ */
+
+export const seedWishes = internalMutation({
+  args: {
+    amount: v.number(),
+  },
+  handler: async (ctx, args) => {
+    for (let i = 0; i < args.amount; i++) {
+      ctx.db.insert("wishes", {
+        name: faker.commerce.product(),
+        category: "k9722ksm8g7p4997gq4g5yy47h7r9ast" as Id<"categories">,
+        imageUrl: faker.image.urlPicsumPhotos(),
+        owner: "j57fn8303afyyzgydhw9v8vpnd7r4cs3" as Id<"users">,
+        updatedAt: Date.now(),
+        description: faker.lorem.sentences(3),
+      });
+    }
+  },
+});

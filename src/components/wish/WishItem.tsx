@@ -1,4 +1,7 @@
-import React from "react";
+import type { FunctionReturnType } from "convex/server";
+import { Blocks, User } from "lucide-react";
+import Image from "next/image";
+import type { api } from "../../../convex/_generated/api";
 import {
   Card,
   CardContent,
@@ -6,11 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Doc } from "../../../convex/_generated/dataModel";
-import Image from "next/image";
-import { FunctionReturnType } from "convex/server";
-import { api } from "../../../convex/_generated/api";
-import { Blocks, Hash, User } from "lucide-react";
 
 interface WishItemProps {
   wish: FunctionReturnType<
@@ -42,10 +40,6 @@ export default function WishItem({ wish }: WishItemProps) {
               <Blocks size={16} />
               {wish.category.name}
             </span>
-            <span>
-              <Hash size={16} />
-              {wish.quantity}
-            </span>
           </div>
         </div>
       </CardHeader>
@@ -55,7 +49,7 @@ export default function WishItem({ wish }: WishItemProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <div className="text-neutral-400 flex items-center gap-2">
+        <div className="flex items-center gap-2 text-neutral-400">
           <User size={20} /> <p className="text-sm">{wish.owner.name}</p>
         </div>
       </CardFooter>
