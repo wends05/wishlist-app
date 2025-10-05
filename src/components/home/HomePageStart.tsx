@@ -1,9 +1,7 @@
-import React from 'react'
-
 export default function HomePageStart() {
   return (
-    <div className='w-full min-h-50 h-[50vh] p-10 items-center flex justify-center'>
+    <div className="flex h-[50vh] min-h-50 w-full items-center justify-center p-10">
       Find a wish to grant, make other people's wishes come true
     </div>
-  )
+  );
 }

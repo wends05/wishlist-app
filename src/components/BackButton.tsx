@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
@@ -9,7 +9,5 @@ interface BackButtonProps {
 
 export default function BackButton({ customText }: BackButtonProps) {
   const { back } = useRouter();
-  return (
-    <Button onClick={back}>{customText || "Back"}</Button>
-  )
+  return <Button onClick={back}>{customText || "Back"}</Button>;
 }

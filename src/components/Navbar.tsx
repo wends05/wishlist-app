@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
-import NavLink from "@/types/NavLink";
 import { rootLinks } from "@/utils/links";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   return (

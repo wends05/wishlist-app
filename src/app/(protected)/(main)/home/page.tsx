@@ -1,8 +1,7 @@
-import WishList from "@/components/home/WishList";
 import HomePageStart from "@/components/home/HomePageStart";
+import WishList from "@/components/home/WishList";
 
-export default  function HomePage() {
-
+export default function HomePage() {
   return (
     <>
       <HomePageStart />

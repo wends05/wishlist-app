@@ -1,11 +1,10 @@
 "use client";
-import { Preloaded, usePreloadedQuery, useQuery } from "convex/react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
-import { FormEvent, useState } from "react";
-import { api } from "../../../convex/_generated/api";
+import type { FormEvent } from "react";
 import { useCreateWishForm } from "@/forms/CreateWishForm";
+import type { api } from "../../../convex/_generated/api";
+import { Input } from "../ui/input";
 
 interface WishCreateFormProps {
   preloadedCategories: Preloaded<typeof api.categories.getAllCategories>;
@@ -32,9 +31,6 @@ export default function WishCreateForm({
           </f.AppField>
           <f.AppField name="description">
             {(field) => <field.FormTextArea label="Item Description" />}
-          </f.AppField>
-          <f.AppField name="quantity">
-            {(field) => <field.FormInput label="Quantity" type="number" />}
           </f.AppField>
           <f.AppField name="category">
             {(field) => (

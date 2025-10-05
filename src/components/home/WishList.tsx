@@ -1,6 +1,6 @@
 "use client";
-import { usePaginatedQuery, usePreloadedQuery } from "convex/react";
-import React, { useEffect } from "react";
+import { usePaginatedQuery } from "convex/react";
+import { useEffect } from "react";
 import { api } from "../../../convex/_generated/api";
 import WishItem from "../wish/WishItem";
 
@@ -30,10 +30,10 @@ export default function WishList() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isLoading]);
+  }, [isLoading, loadMore]);
 
   return (
-    <div className="h-full flex justify-center flex-col items-center">
+    <div className="flex h-full flex-col items-center justify-center">
       <div className="grid w-max grid-cols-1 place-items-center gap-12 lg:grid-cols-2">
         {wishes.map((wish) => (
           <WishItem key={wish._id} wish={wish} />

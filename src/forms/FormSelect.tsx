@@ -1,7 +1,4 @@
-import React, { HTMLInputTypeAttribute, useId } from "react";
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { useFieldContext } from "./CreateWishForm";
+import { useId } from "react";
 import {
   Select,
   SelectContent,
@@ -9,6 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "../components/ui/label";
+import { useFieldContext } from "./CreateWishForm";
 
 interface FormSelectProps {
   label: string;

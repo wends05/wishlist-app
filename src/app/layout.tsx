@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Albert_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/providers/theme-provider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
-import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const albertSans = Albert_Sans({
   variable: "--font-albert-sans",

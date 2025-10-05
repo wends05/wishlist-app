@@ -14,7 +14,8 @@
       "!dist",
       "!build",
       "!_generated",
-      "!*.lock"
+      "!*.lock",
+      "!ui"
     ]
   },
   "formatter": {

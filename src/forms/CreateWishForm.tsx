@@ -1,21 +1,18 @@
-import { CreateWishForm, createWishSchema } from "@/types/dto/wish";
-import { Id } from "../../convex/_generated/dataModel";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import { type CreateWishForm, createWishSchema } from "@/types/dto/wish";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
 import FormSubmit from "./FormSubmit";
 import FormTextArea from "./FormTextArea";
 
 const defaultWish: CreateWishForm = {
-  category: undefined as any,
+  category: "",
   description: "",
   name: "",
-  quantity: 1,
   localImageURL: undefined,
 };
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
@@ -58,7 +55,7 @@ export const useCreateWishForm = () => {
         }
 
         // handle image upload
-        let imageId: Id<"_storage"> | undefined = undefined;
+        let imageId: Id<"_storage"> | undefined;
 
         if (value.localImageURL) {
           // handle image upload
@@ -97,13 +94,12 @@ export const useCreateWishForm = () => {
         await createWish({
           name: value.name,
           description: value.description,
-          quantity: Number(value.quantity),
           imageId,
           category: categoryId,
         });
         toast.success("Wish created successfully");
         formApi.reset();
-      } catch (error) {
+      } catch {
         toast.error("Failed to create wish");
       }
     },

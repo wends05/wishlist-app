@@ -1,5 +1,5 @@
-import { Doc } from "../../../convex/_generated/dataModel";
 import * as z from "zod";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
 export const createWishSchema = z
   .object({
@@ -15,7 +15,7 @@ export const createWishSchema = z
 
 export type CreateWishForm = Pick<
   Doc<"wishes">,
-  "name" | "description" | "quantity"
+  "name" | "description"
 > & {
   category: string;
   localImageURL?: string;

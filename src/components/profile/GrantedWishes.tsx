@@ -1,7 +1,6 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
-import { CardHeader } from "../ui/card";
 import { WishItem } from "../wish/Wish";
 
 interface GrantedWishesProps {

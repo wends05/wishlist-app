@@ -1,4 +1,7 @@
-import React, { FormEvent, useState } from "react";
+import { useAuthActions } from "@convex-dev/auth/react";
+import { type FormEvent, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 import {
   Card,
   CardAction,
@@ -8,10 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { toast } from "sonner";
 
 interface RegisterFormProps {
   handleToggleIsOnRegister: () => void;
@@ -33,7 +33,7 @@ export default function RegisterForm({
         return;
       }
       void (await signIn("password", formData));
-    } catch (error) {
+    } catch {
       toast.error("Failed to sign up");
     }
     setSubmitting(false);

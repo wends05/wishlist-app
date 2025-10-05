@@ -1,22 +1,17 @@
 "use client";
-import React from "react";
+import { PlusCircleIcon } from "lucide-react";
+import Link from "next/link";
+import { homeLinks } from "@/utils/links";
+import LogoutButton from "../LogoutButton";
+import { Button } from "../ui/button";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "../ui/sidebar";
-import NavLink from "@/types/NavLink";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { homeLinks } from "@/utils/links";
-import { useAuthActions } from "@convex-dev/auth/react";
-import LogoutButton from "../LogoutButton";
-import { PlusCircleIcon } from "lucide-react";
 
 export default function HomeSidebar() {
-  const { signOut } = useAuthActions();
-
   return (
     <Sidebar variant="inset">
       <SidebarContent>

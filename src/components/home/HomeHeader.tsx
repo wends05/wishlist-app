@@ -1,13 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { SidebarTrigger } from "../ui/sidebar";
 import { getRouteTitle, homeLinks } from "@/utils/links";
+import { SidebarTrigger } from "../ui/sidebar";
 
 const HomeHeader = () => {
   const pathName = usePathname();
   return (
-    <main className="flex items-center gap-4 py-2 fixed px-3">
+    <main className="fixed flex items-center gap-4 px-3 py-2">
       <SidebarTrigger /> <h3>{getRouteTitle(pathName, homeLinks)}</h3>
     </main>
   );

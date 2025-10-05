@@ -1,20 +1,18 @@
+import { useAuthActions } from "@convex-dev/auth/react";
+import { SiGithub } from "@icons-pack/react-simple-icons";
+import { type FormEvent, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { FormEvent } from "react";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useState } from "react";
-import { SiGithub } from "@icons-pack/react-simple-icons";
-import { toast } from "sonner";
 
 interface LoginFormProps {
   handleToggleIsOnRegister: () => void;
@@ -33,7 +31,7 @@ export default function LoginForm({
     try {
       const formData = new FormData(e.currentTarget);
       await signIn("password", formData);
-    } catch (error) {
+    } catch {
       toast.error("User not found or invalid password");
     }
     setSubmitting(false);
@@ -43,7 +41,7 @@ export default function LoginForm({
     setSigningInGithub(true);
     try {
       await signIn("github");
-    } catch (error) {
+    } catch {
       toast.error("Failed to sign in with Github");
     }
     setSigningInGithub(false);
