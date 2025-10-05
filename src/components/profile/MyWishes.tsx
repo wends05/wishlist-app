@@ -4,11 +4,19 @@ import { api } from "../../../convex/_generated/api";
 import { Card, CardContent } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import GrantedWishes from "./GrantedWishes";
-import PendingWishes from "./PendingWishes";
+import WishesWithoutStatus from "./WishesWithoutStatus";
 
 export default async function MyWishes() {
-  const pendingWishes = await preloadQuery(
-    api.wishes.getPendingWishes,
+  const preloadedGrantedWishes = await preloadQuery(
+    api.wishes.getGrantedWishes,
+    {},
+    {
+      token: await convexAuthNextjsToken(),
+    },
+  );
+
+  const preloadedWishesWithoutStatus = await preloadQuery(
+    api.wishes.getWishesWithoutStatus,
     {},
     {
       token: await convexAuthNextjsToken(),
@@ -16,19 +24,21 @@ export default async function MyWishes() {
   );
 
   return (
-    <Tabs defaultValue="pending">
-      <Card>
-        <CardContent className="space-y-1">
+    <Tabs defaultValue="pending" className="h-full py-20">
+      <Card className="h-full">
+        <CardContent className="h-full space-y-1">
           <TabsList className="gap-1">
             <TabsTrigger value="pending">My Wishes</TabsTrigger>
             <TabsTrigger value="granted">Granted Wishes</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="pending">
-            <PendingWishes pendingWishes={pendingWishes} />
+          <TabsContent value="pending" className="pt-4">
+            <WishesWithoutStatus
+              preloadedWishesWithoutStatus={preloadedWishesWithoutStatus}
+            />
           </TabsContent>
-          <TabsContent value="granted">
-            <GrantedWishes />
+          <TabsContent value="granted" className="pt-4">
+            <GrantedWishes preloadedGrantedWishes={preloadedGrantedWishes} />
           </TabsContent>
         </CardContent>
       </Card>

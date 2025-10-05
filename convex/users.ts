@@ -1,12 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import {
-  mutation,
-  QueryCtx,
-  type QueryCtx,
-  query,
-  query,
-} from "./_generated/server";
+import { mutation, type QueryCtx, query } from "./_generated/server";
 
 /**
  * Utils

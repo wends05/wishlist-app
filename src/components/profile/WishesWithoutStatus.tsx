@@ -4,29 +4,29 @@ import type { api } from "../../../convex/_generated/api";
 import { CardHeader } from "../ui/card";
 import { WishItem } from "../wish/Wish";
 
-interface GrantedWishesProps {
-  preloadedGrantedWishes: Preloaded<typeof api.wishes.getGrantedWishes>;
+interface WishesWithoutStatusProps {
+  preloadedWishesWithoutStatus: Preloaded<
+    typeof api.wishes.getWishesWithoutStatus
+  >;
 }
 
-export default function GrantedWishes({
-  preloadedGrantedWishes,
-}: GrantedWishesProps) {
-  const grantedWishes = usePreloadedQuery(preloadedGrantedWishes);
-
+export default function WishesWithoutStatus({
+  preloadedWishesWithoutStatus,
+}: WishesWithoutStatusProps) {
+  const wishesWithoutStatus = usePreloadedQuery(preloadedWishesWithoutStatus);
   return (
-    <div className="grid h-fit grid-cols-2 gap-4">
-      {grantedWishes.map((wish) => (
+    <div className="grid h-full grid-cols-2 gap-4">
+      {wishesWithoutStatus.map((wish) => (
         <WishItem key={wish._id} wish={wish}>
-          <WishItem.Header>
+          <CardHeader>
             <WishItem.Image />
-          </WishItem.Header>
+          </CardHeader>
           <WishItem.Content>
             {({ name, description }) => (
-              <div>
+              <>
                 <h1>{name}</h1>
                 <p>{description}</p>
-                <WishItem.GrantedBy className={"pt-5 text-secondary"} />
-              </div>
+              </>
             )}
           </WishItem.Content>
         </WishItem>

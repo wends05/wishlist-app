@@ -67,7 +67,7 @@ export const findWishById = query({
   },
 });
 
-export const getUserWishesWithoutGrants = query({
+export const getWishesWithoutStatus = query({
   args: {},
   handler: async (ctx, _args) => {
     const userId = await getAuthUserId(ctx);
@@ -78,7 +78,10 @@ export const getUserWishesWithoutGrants = query({
 
     const wishes = await getUserWishesByStatus(ctx);
 
-    return wishes;
+    return wishes.map((wish) => ({
+      ...wish,
+      grantor: undefined,
+    }));
   },
 });
 
@@ -104,7 +107,35 @@ export const getGrantedWishes = query({
       throw new Error("Unauthorized");
     }
 
-    return await getUserWishesByStatus(ctx, "completed");
+    const grantedWishes = await getUserWishesByStatus(ctx, "completed");
+
+    return await Promise.all(
+      grantedWishes.map(async (wish) => {
+        if (!wish.grantor) {
+          return {
+            ...wish,
+            grantor: null,
+          };
+        }
+
+        const grantor = await ctx.db.get(wish.grantor);
+
+        if (!grantor) {
+          return {
+            ...wish,
+            grantor: null,
+          };
+        }
+
+        return {
+          ...wish,
+          grantor: {
+            id: grantor._id,
+            name: grantor.name,
+          },
+        };
+      }),
+    );
   },
 });
 
@@ -184,15 +215,32 @@ const getUserWishesByStatus = async (
   const userWishes = await getUserWishes(ctx);
   const filteredWishes = await Promise.all(
     userWishes.map(async (wish) => {
-      const anyGrant = await ctx.db
-        .query("wishes")
-        .withIndex("by_status", (q) => q.eq("status", status))
-        .first();
-      return anyGrant ? null : wish;
+      if (wish.status !== status) {
+        return null;
+      }
+
+      return await getWishCategoryDetails(ctx, wish);
     }),
   );
-  return filteredWishes.filter(Boolean);
+
+  const finalWishes = filteredWishes.filter((wish) => wish !== null);
+
+  return finalWishes;
 };
+
+const getWishCategoryDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
+  const category = await ctx.db.get(wish.category);
+
+  const finalWish = {
+    ...wish,
+    category: {
+      name: category!.name || "Unknown Category",
+      _id: category!._id,
+    },
+  };
+  return finalWish;
+};
+
 /**
  * Seeding
  */
