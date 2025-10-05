@@ -1,5 +1,5 @@
-import React from "react";
+import ProfilePage from "@/components/profile/ProfilePage";
 
-export default function ProfilePage() {
-  return <div>ProfilePage</div>;
+export default async function Profile() {
+  return <ProfilePage />;
 }

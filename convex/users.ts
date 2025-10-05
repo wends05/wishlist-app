@@ -1,6 +1,10 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { type QueryCtx, query } from "./_generated/server";
+import { v } from "convex/values";
+import { mutation, type QueryCtx, query } from "./_generated/server";
 
+/**
+ * Utils
+ */
 export const getCurrentUserDataHandler = async (ctx: QueryCtx) => {
   const userId = await getAuthUserId(ctx);
 
@@ -13,11 +17,6 @@ export const getCurrentUserDataHandler = async (ctx: QueryCtx) => {
   return user!;
 };
 
-export const getCurrentUserData = query({
-  args: {},
-  handler: getCurrentUserDataHandler,
-});
-
 export const checkUserIdentity = async (ctx: QueryCtx) => {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
@@ -25,3 +24,24 @@ export const checkUserIdentity = async (ctx: QueryCtx) => {
   }
   return identity;
 };
+
+/**
+ * Queries
+ */
+export const getCurrentUserData = query({
+  args: {},
+  handler: getCurrentUserDataHandler,
+});
+
+/**
+ * Mutations
+ */
+
+export const updateProfile = mutation({
+  args: {
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserDataHandler(ctx);
+  },
+});
