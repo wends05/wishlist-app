@@ -1,7 +1,8 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
-import { WishItem } from "../wish/Wish";
+import EmptyWishList from "../wish/EmptyWishList";
+import { WishComponent } from "../wish/WishComponent";
 
 interface GrantedWishesProps {
   preloadedGrantedWishes: Preloaded<typeof api.wishes.getGrantedWishes>;
@@ -13,23 +14,27 @@ export default function GrantedWishes({
   const grantedWishes = usePreloadedQuery(preloadedGrantedWishes);
 
   return (
-    <div className="grid h-fit grid-cols-2 gap-4">
-      {grantedWishes.map((wish) => (
-        <WishItem key={wish._id} wish={wish}>
-          <WishItem.Header>
-            <WishItem.Image />
-          </WishItem.Header>
-          <WishItem.Content>
-            {({ name, description }) => (
-              <div>
-                <h1>{name}</h1>
-                <p>{description}</p>
-                <WishItem.GrantedBy className={"pt-5 text-secondary"} />
-              </div>
-            )}
-          </WishItem.Content>
-        </WishItem>
-      ))}
-    </div>
+    <>
+      {grantedWishes.length === 0 && <EmptyWishList title="No Granted Wishes" description="You have no wishes that are granted yet. Wait for someone to grant you one." />}
+
+      <div className="grid h-full w-full grid-cols-2 gap-4">
+        {grantedWishes.map((wish) => (
+          <WishComponent key={wish._id} wish={wish}>
+            <WishComponent.Header>
+              <WishComponent.Image />
+            </WishComponent.Header>
+            <WishComponent.Content>
+              {({ name, description }) => (
+                <div>
+                  <h1>{name}</h1>
+                  <p>{description}</p>
+                  <WishComponent.GrantedBy className="text-secondary pt-5" />
+                </div>
+              )}
+            </WishComponent.Content>
+          </WishComponent>
+        ))}
+      </div>
+    </>
   );
 }

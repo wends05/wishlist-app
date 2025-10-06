@@ -20,7 +20,7 @@ type WishWithoutStatus = FunctionReturnType<
 >[number];
 
 type HomePageWish = FunctionReturnType<
-  typeof api.wishes.findWishesOnHomePage
+  typeof api.wishes.getHomePageWishes
 >["page"][number];
 
 type Wish = BaseWish | GrantedWish | WishWithoutStatus | HomePageWish;
@@ -143,7 +143,7 @@ function WishGrantedBy({ className }: WishGrantedByProps) {
 function WishOwner() {
   const { wish } = useWishItem();
 
-  if ("owner" in wish.owner && wish.owner && typeof wish.owner === "object") {
+  if (typeof wish.owner === "object") {
     return (
       <div className="flex items-center gap-2 text-neutral-400">
         <User size={20} /> <p className="text-sm">{wish.owner.name}</p>
@@ -161,7 +161,7 @@ function WishActions({ children }: WishActionsProps) {
   return <CardFooter>{children}</CardFooter>;
 }
 
-export const WishItem = Object.assign(WishItemRoot, {
+export const WishComponent = Object.assign(WishItemRoot, {
   Header: WishHeader,
   Content: WishContent,
   Image: WishImage,

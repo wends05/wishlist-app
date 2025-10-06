@@ -11,9 +11,9 @@ export default function ProfileHeader({
 }: ProfileHeaderProps) {
   const profileDetails = usePreloadedQuery(preloadedProfileDetails);
   return (
-    <div className="flex h-50 py-20">
+    <div className="flex h-72 items-center py-20">
       <div className="flex h-full items-center justify-center">
-        <div className="h-40 w-40 rounded-full bg-slate-900" />
+        <div className="size-40 rounded-full bg-slate-900" />
       </div>
       <div className="flex flex-col justify-center pl-8">
         <h2>{profileDetails.name}</h2>

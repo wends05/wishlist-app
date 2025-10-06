@@ -24,7 +24,7 @@ export default async function MyWishes() {
   );
 
   return (
-    <Tabs defaultValue="pending" className="h-full py-20">
+    <Tabs defaultValue="pending" className="h-full">
       <Card className="h-full">
         <CardContent className="h-full space-y-1">
           <TabsList className="gap-1">

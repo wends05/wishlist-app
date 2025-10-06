@@ -18,23 +18,23 @@ export default function HomeSidebar() {
         <SidebarHeader className="text-center">
           <h2>Wishlist App</h2>
         </SidebarHeader>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 px-4">
           {homeLinks.map((link) => (
-            <Button key={link.href} className="mx-4">
-              <Link href={link.href}>
+            <Link href={link.href} key={link.href} className="flex w-full">
+              <Button className="w-full px-4">
                 <h4>{link.label}</h4>
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           ))}
         </div>
       </SidebarContent>
       <SidebarFooter>
-        <Button variant="outline" className="hover:text-primary mx-4">
-          <Link href="/create" className="flex items-center gap-2">
+        <Link href="/create" className="flex items-center gap-2">
+          <Button variant="outline" className="hover:text-primary mx-4">
             <PlusCircleIcon />
             Create A New Wish
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         <LogoutButton />
       </SidebarFooter>
     </Sidebar>

@@ -23,7 +23,7 @@ export const findWishes = query({
   },
 });
 
-export const findWishesOnHomePage = query({
+export const getHomePageWishes = query({
   args: { paginationOpts: paginationOptsValidator },
   handler: async (ctx, args) => {
     await checkUserIdentity(ctx);
@@ -56,17 +56,6 @@ export const findWishesOnHomePage = query({
   },
 });
 
-export const findWishById = query({
-  args: {
-    id: v.id("wishes"),
-  },
-  handler: async (ctx, args) => {
-    await checkUserIdentity(ctx);
-    const wish = await ctx.db.get(args.id);
-    return wish;
-  },
-});
-
 export const getWishesWithoutStatus = query({
   args: {},
   handler: async (ctx, _args) => {
@@ -77,6 +66,8 @@ export const getWishesWithoutStatus = query({
     }
 
     const wishes = await getUserWishesByStatus(ctx);
+
+    console.log("WISHES NO STATUS", wishes);
 
     return wishes.map((wish) => ({
       ...wish,
@@ -200,11 +191,11 @@ const getUserWishes = async (ctx: QueryCtx) => {
     throw new Error("Unauthorized");
   }
 
-  const userWishes = await ctx.db
+  const userWishes = ctx.db
     .query("wishes")
-    .withIndex("by_owner_updated", (q) => q.eq("owner", userId))
-    .order("desc")
+    .withIndex("by_owner", (q) => q.eq("owner", userId))
     .collect();
+
   return userWishes;
 };
 
@@ -213,22 +204,18 @@ const getUserWishesByStatus = async (
   status?: Doc<"wishes">["status"],
 ) => {
   const userWishes = await getUserWishes(ctx);
-  const filteredWishes = await Promise.all(
-    userWishes.map(async (wish) => {
-      if (wish.status !== status) {
-        return null;
-      }
 
-      return await getWishCategoryDetails(ctx, wish);
-    }),
+  const filteredWishes = userWishes.filter((w) => w.status === status);
+
+  return await Promise.all(
+    filteredWishes.map(async (wish) => getWishWithCategoryDetails(ctx, wish)),
   );
-
-  const finalWishes = filteredWishes.filter((wish) => wish !== null);
-
-  return finalWishes;
 };
 
-const getWishCategoryDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
+const getWishWithCategoryDetails = async (
+  ctx: QueryCtx,
+  wish: Doc<"wishes">,
+) => {
   const category = await ctx.db.get(wish.category);
 
   const finalWish = {

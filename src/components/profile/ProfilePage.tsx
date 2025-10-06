@@ -13,7 +13,7 @@ export default async function ProfilePage() {
     },
   );
   return (
-    <div className="flex h-full flex-col pt-14 md:px-20">
+    <div className="flex h-full flex-col pt-14 pb-20 md:px-20">
       <ProfileHeader preloadedProfileDetails={preloadedProfileDetails} />
       <MyWishes />
     </div>
