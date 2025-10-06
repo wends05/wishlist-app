@@ -2,6 +2,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { faker } from "@faker-js/faker";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import Fuse from "fuse.js";
 import type { Doc, Id } from "./_generated/dataModel";
 import {
   internalMutation,
@@ -24,33 +25,44 @@ export const findWishes = query({
 });
 
 export const getHomePageWishes = query({
-  args: { paginationOpts: paginationOptsValidator },
+  args: {
+    paginationOpts: paginationOptsValidator,
+    searchQuery: v.optional(v.string()),
+  },
   handler: async (ctx, args) => {
     await checkUserIdentity(ctx);
+
     const wishResults = await ctx.db
       .query("wishes")
       .withIndex("by_creation_time")
       .order("desc")
       .paginate(args.paginationOpts);
 
+    if (!args.searchQuery) {
+      return {
+        ...wishResults,
+        page: await Promise.all(
+          wishResults.page.map(async (wish) => {
+            return await getWishWithFullDetails(ctx, wish);
+          }),
+        ),
+      };
+    }
+
+    const fuse = new Fuse(wishResults.page, {
+      keys: ["name", "description"],
+    });
+
+    const searchResults = fuse.search(args.searchQuery || "");
+
     return {
       ...wishResults,
       page: await Promise.all(
-        wishResults.page.map(async (wish) => {
-          const category = await ctx.db.get(wish.category);
-          const byOwner = await ctx.db.get(wish.owner);
-          return {
-            ...wish,
-            owner: {
-              name: byOwner!.name,
-              _id: byOwner!._id,
-            },
-            category: {
-              name: category!.name || "Unknown Category",
-              _id: category!._id,
-            },
-          };
-        }),
+        searchResults
+          .map((res) => res.item)
+          .map(async (wish) => {
+            return await getWishWithFullDetails(ctx, wish);
+          }),
       ),
     };
   },
@@ -212,6 +224,23 @@ const getUserWishesByStatus = async (
   );
 };
 
+const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
+  const owner = await ctx.db.get(wish.owner);
+  const category = await ctx.db.get(wish.category);
+
+  const finalWish = {
+    ...wish,
+    owner: {
+      name: owner!.name,
+      _id: owner!._id,
+    },
+    category: {
+      name: category!.name || "Unknown Category",
+      _id: category!._id,
+    },
+  };
+  return finalWish;
+};
 const getWishWithCategoryDetails = async (
   ctx: QueryCtx,
   wish: Doc<"wishes">,

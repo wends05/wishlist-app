@@ -1,12 +1,15 @@
 "use client";
 import { usePaginatedQuery } from "convex/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import { Item, ItemContent } from "../ui/item";
 import { Spinner } from "../ui/spinner";
 import WishItem from "../wish/WishItem";
+import Search from "./Search";
 
 export default function WishList() {
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
   const {
     results: wishes,
     loadMore,
@@ -14,7 +17,7 @@ export default function WishList() {
     status,
   } = usePaginatedQuery(
     api.wishes.getHomePageWishes,
-    {},
+    { searchQuery: debouncedQuery || "" },
     {
       initialNumItems: 5,
     },
@@ -35,7 +38,8 @@ export default function WishList() {
   }, [isLoading, loadMore]);
 
   return (
-    <div className="flex h-full flex-col items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-center gap-20">
+      <Search searchQuery={debouncedQuery} setSearchQuery={setDebouncedQuery} />
       {isLoading && <Spinner className="size-20" />}
       <div className="grid w-max grid-cols-1 place-items-center gap-12 lg:grid-cols-2">
         {wishes.map((wish) => (
@@ -50,7 +54,11 @@ export default function WishList() {
         ) : (
           status === "Exhausted" && (
             <Item variant={"outline"}>
-              <ItemContent>No more wishes</ItemContent>
+              <ItemContent>
+                {debouncedQuery && wishes.length === 0
+                  ? "No wishes found matching your search"
+                  : "No more wishes"}
+              </ItemContent>
             </Item>
           )
         )}
