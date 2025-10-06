@@ -142,6 +142,28 @@ export const getGrantedWishes = query({
   },
 });
 
+export const getReservedWishes = query({
+  args: {},
+  async handler(ctx, _args) {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const wishes = await ctx.db
+      .query("wishes")
+      .withIndex("by_grantor_status", (q) =>
+        q.eq("grantor", userId).eq("status", "pending"),
+      )
+      .collect();
+
+    return await Promise.all(
+      wishes.map(async (wish) => getWishWithFullDetails(ctx, wish)),
+    );
+  },
+});
+
 /**
  * Mutations
  */
@@ -227,6 +249,7 @@ const getUserWishesByStatus = async (
 const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
   const owner = await ctx.db.get(wish.owner);
   const category = await ctx.db.get(wish.category);
+  const grantor = wish.grantor ? await ctx.db.get(wish.grantor) : null;
 
   const finalWish = {
     ...wish,
@@ -238,6 +261,12 @@ const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
       name: category!.name || "Unknown Category",
       _id: category!._id,
     },
+    grantor: grantor
+      ? {
+          name: grantor.name,
+          _id: grantor._id,
+        }
+      : wish.grantor,
   };
   return finalWish;
 };
