@@ -23,7 +23,16 @@ type HomePageWish = FunctionReturnType<
   typeof api.wishes.getHomePageWishes
 >["page"][number];
 
-type Wish = BaseWish | GrantedWish | WishWithoutStatus | HomePageWish;
+type ReservedWish = FunctionReturnType<
+  typeof api.wishes.getReservedWishes
+>[number];
+
+type Wish =
+  | BaseWish
+  | GrantedWish
+  | WishWithoutStatus
+  | HomePageWish
+  | ReservedWish;
 
 type WishBaseInfo = Pick<BaseWish, "_id" | "name" | "description">;
 

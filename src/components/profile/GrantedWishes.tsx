@@ -15,7 +15,12 @@ export default function GrantedWishes({
 
   return (
     <>
-      {grantedWishes.length === 0 && <EmptyWishList title="No Granted Wishes" description="You have no wishes that are granted yet. Wait for someone to grant you one." />}
+      {grantedWishes.length === 0 && (
+        <EmptyWishList
+          title="No Granted Wishes"
+          description="You have no wishes that are granted yet. Wait for someone to grant you one."
+        />
+      )}
 
       <div className="grid h-full w-full grid-cols-2 gap-4">
         {grantedWishes.map((wish) => (
@@ -28,7 +33,7 @@ export default function GrantedWishes({
                 <div>
                   <h1>{name}</h1>
                   <p>{description}</p>
-                  <WishComponent.GrantedBy className="text-secondary pt-5" />
+                  <WishComponent.GrantedBy className="pt-5 text-secondary" />
                 </div>
               )}
             </WishComponent.Content>
