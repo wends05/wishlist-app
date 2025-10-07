@@ -30,7 +30,8 @@ export default defineSchema({
     ),
   })
     .index("by_owner", ["owner"])
-    .index("by_grantor_status", ["grantor", "status"]),
+    .index("by_grantor_status", ["grantor", "status"])
+    .index("by_status_updatedAt", ["status", "updatedAt"]),
   categories: defineTable({
     name: v.string(),
     description: v.string(),
