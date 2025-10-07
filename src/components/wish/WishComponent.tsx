@@ -1,38 +1,11 @@
 "use client";
 
-import type { FunctionReturnType } from "convex/server";
 import { Gift, User } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
-import type { api } from "../../../convex/_generated/api";
-import type { Doc } from "../../../convex/_generated/dataModel";
+import type { BaseWish, Wish } from "@/types/Wish";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-
-type BaseWish = Doc<"wishes">;
-
-type GrantedWish = FunctionReturnType<
-  typeof api.wishes.getGrantedWishes
->[number];
-
-type WishWithoutStatus = FunctionReturnType<
-  typeof api.wishes.getWishesWithoutStatus
->[number];
-
-type HomePageWish = FunctionReturnType<
-  typeof api.wishes.getHomePageWishes
->["page"][number];
-
-type ReservedWish = FunctionReturnType<
-  typeof api.wishes.getReservedWishes
->[number];
-
-type Wish =
-  | BaseWish
-  | GrantedWish
-  | WishWithoutStatus
-  | HomePageWish
-  | ReservedWish;
 
 type WishBaseInfo = Pick<BaseWish, "_id" | "name" | "description">;
 
@@ -115,7 +88,7 @@ function WishContent({ children, props }: WishContentProps) {
   const { wish } = useWishItem();
 
   return (
-    <CardContent {...props}>
+    <CardContent {...props} className={cn("h-full", props?.className)}>
       {children && (
         <div className="not-first:pt-3">
           {children({
@@ -162,11 +135,7 @@ function WishOwner() {
   return <p className="text-neutral-400">Unknown Owner</p>;
 }
 
-interface WishActionsProps {
-  children: React.ReactNode;
-}
-
-function WishActions({ children }: WishActionsProps) {
+function WishFooter({ children }: PropsWithChildren) {
   return <CardFooter>{children}</CardFooter>;
 }
 
@@ -175,6 +144,6 @@ export const WishComponent = Object.assign(WishItemRoot, {
   Content: WishContent,
   Image: WishImage,
   GrantedBy: WishGrantedBy,
-  Actions: WishActions,
+  Footer: WishFooter,
   Owner: WishOwner,
 });

@@ -209,6 +209,36 @@ export const generateUploadURL = mutation({
   },
 });
 
+export const cancelReservedWish = mutation({
+  args: {
+    wishId: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const wish = await ctx.db.get(args.wishId);
+
+    if (!wish) {
+      throw new Error("Wish not found");
+    }
+    if (wish.grantor?.toString() !== userId) {
+      throw new Error("You are not the grantor of this wish");
+    }
+
+    const updatedWish = await ctx.db.patch(args.wishId, {
+      grantor: undefined,
+      status: "pending",
+      updatedAt: Date.now(),
+    });
+
+    return updatedWish;
+  },
+});
+
 /**
  * Utils
  */

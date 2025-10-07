@@ -36,9 +36,9 @@ export default function WishItem({ wish }: WishItemProps) {
           </div>
         )}
       </WishComponent.Content>
-      <WishComponent.Actions>
+      <WishComponent.Footer>
         <WishComponent.Owner />
-      </WishComponent.Actions>
+      </WishComponent.Footer>
     </WishComponent>
   );
 }
