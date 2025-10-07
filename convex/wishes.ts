@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { faker } from "@faker-js/faker";
 import { paginationOptsValidator } from "convex/server";
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import Fuse from "fuse.js";
 import type { Doc, Id } from "./_generated/dataModel";
 import {
@@ -34,7 +34,7 @@ export const getHomePageWishes = query({
 
     const wishResults = await ctx.db
       .query("wishes")
-      .withIndex("by_creation_time")
+      .withIndex("by_status_updatedAt", (q) => q.eq("status", undefined))
       .order("desc")
       .paginate(args.paginationOpts);
 
@@ -231,10 +231,41 @@ export const cancelReservedWish = mutation({
 
     const updatedWish = await ctx.db.patch(args.wishId, {
       grantor: undefined,
-      status: "pending",
+      status: undefined,
       updatedAt: Date.now(),
     });
 
+    return updatedWish;
+  },
+});
+
+export const reserveWish = mutation({
+  args: {
+    wishId: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new ConvexError("Unauthorized");
+    }
+
+    const wish = await ctx.db.get(args.wishId);
+
+    if (!wish) {
+      throw new ConvexError("Wish not found");
+    }
+    if (wish.owner.toString() === userId) {
+      throw new ConvexError("You cannot reserve your own wish");
+    }
+    if (wish.grantor) {
+      throw new ConvexError(`Wish for ${wish.name} is already reserved`);
+    }
+    const updatedWish = await ctx.db.patch(args.wishId, {
+      grantor: userId,
+      status: "pending",
+      updatedAt: Date.now(),
+    });
     return updatedWish;
   },
 });

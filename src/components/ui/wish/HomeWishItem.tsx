@@ -1,6 +1,10 @@
+import { useMutation } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
+import { ConvexError } from "convex/values";
 import { Blocks } from "lucide-react";
-import type { api } from "../../../../convex/_generated/api";
+import { toast } from "sonner";
+import { api } from "../../../../convex/_generated/api";
+import { Button } from "../button";
 import { CardTitle } from "../card";
 import { WishComponent } from "./WishComponent";
 
@@ -9,6 +13,18 @@ interface WishItemProps {
 }
 
 export default function HomeWishItem({ wish }: WishItemProps) {
+  const reserveWish = useMutation(api.wishes.reserveWish);
+
+  const handleReserveWish = async () => {
+    try {
+      await reserveWish({ wishId: wish._id });
+    } catch (error) {
+      if (error instanceof ConvexError) {
+        toast.error(error.data);
+      }
+    }
+  };
+
   return (
     <WishComponent wish={wish} className="h-full min-h-30 w-full max-w-sm">
       <WishComponent.Header props={{ className: "space-y-3" }}>
@@ -37,7 +53,12 @@ export default function HomeWishItem({ wish }: WishItemProps) {
         )}
       </WishComponent.Content>
       <WishComponent.Footer>
-        <WishComponent.Owner />
+        <div className="flex w-full justify-between">
+          <WishComponent.Owner />
+          <div className="flex gap-2">
+            <Button onClick={handleReserveWish}>Reserve</Button>
+          </div>
+        </div>
       </WishComponent.Footer>
     </WishComponent>
   );
