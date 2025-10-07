@@ -30,12 +30,17 @@ export const getHomePageWishes = query({
     searchQuery: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    await checkUserIdentity(ctx);
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      throw new ConvexError("Unauthorized");
+    }
 
     const wishResults = await ctx.db
       .query("wishes")
-      .withIndex("by_status_updatedAt", (q) => q.eq("status", undefined))
+      .withIndex("home", (q) => q.eq("status", undefined))
       .order("desc")
+      .filter((q) => q.neq(q.field("owner"), userId))
       .paginate(args.paginationOpts);
 
     if (!args.searchQuery) {
