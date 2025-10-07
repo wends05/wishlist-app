@@ -9,6 +9,9 @@ const protectedRoute = createRouteMatcher([
   "/home(.*)",
   "/profile(.*)",
   "/wish(.*)",
+  "/feature(.*)",
+  "/profile(.*)",
+  "/reserved(.*)"
 ]);
 
 export default convexAuthNextjsMiddleware(

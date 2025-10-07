@@ -1,8 +1,8 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
-import EmptyWishList from "../wish/EmptyWishList";
-import { WishComponent } from "../wish/WishComponent";
+import EmptyWishList from "../ui/wish/EmptyWishList";
+import GrantedWish from "../ui/wish/GrantedWish";
 
 interface GrantedWishesProps {
   preloadedGrantedWishes: Preloaded<typeof api.wishes.getGrantedWishes>;
@@ -24,20 +24,7 @@ export default function GrantedWishes({
 
       <div className="grid h-full w-full grid-cols-2 gap-4">
         {grantedWishes.map((wish) => (
-          <WishComponent key={wish._id} wish={wish}>
-            <WishComponent.Header>
-              <WishComponent.Image />
-            </WishComponent.Header>
-            <WishComponent.Content>
-              {({ name, description }) => (
-                <div>
-                  <h1>{name}</h1>
-                  <p>{description}</p>
-                  <WishComponent.GrantedBy className="pt-5 text-secondary" />
-                </div>
-              )}
-            </WishComponent.Content>
-          </WishComponent>
+          <GrantedWish key={wish._id} wish={wish} />
         ))}
       </div>
     </>

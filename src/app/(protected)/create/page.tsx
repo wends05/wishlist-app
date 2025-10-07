@@ -7,7 +7,7 @@ import {
   CardContent,
   CardHeader,
 } from "@/components/ui/card";
-import WishCreateForm from "@/components/wish/WishCreateForm";
+import WishCreateForm from "@/forms/WishCreateForm";
 import { api } from "../../../../convex/_generated/api";
 
 export default async function CreateWishPage() {

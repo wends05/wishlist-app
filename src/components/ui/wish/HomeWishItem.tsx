@@ -1,14 +1,14 @@
 import type { FunctionReturnType } from "convex/server";
 import { Blocks } from "lucide-react";
-import type { api } from "../../../convex/_generated/api";
-import { CardTitle } from "../ui/card";
+import type { api } from "../../../../convex/_generated/api";
+import { CardTitle } from "../card";
 import { WishComponent } from "./WishComponent";
 
 interface WishItemProps {
   wish: FunctionReturnType<typeof api.wishes.getHomePageWishes>["page"][number];
 }
 
-export default function WishItem({ wish }: WishItemProps) {
+export default function HomeWishItem({ wish }: WishItemProps) {
   return (
     <WishComponent wish={wish} className="h-full min-h-30 w-full max-w-sm">
       <WishComponent.Header props={{ className: "space-y-3" }}>

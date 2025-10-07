@@ -1,9 +1,8 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
-import { CardHeader } from "../ui/card";
-import EmptyWishList from "../wish/EmptyWishList";
-import { WishComponent } from "../wish/WishComponent";
+import EmptyWishList from "../ui/wish/EmptyWishList";
+import WishWithoutStatus from "../ui/wish/WishWithoutStatus";
 
 interface WishesWithoutStatusProps {
   preloadedWishesWithoutStatus: Preloaded<
@@ -20,19 +19,7 @@ export default function WishesWithoutStatus({
       {wishesWithoutStatus.length === 0 && <EmptyWishList />}
       <div className="grid h-full grid-cols-2 gap-4">
         {wishesWithoutStatus.map((wish) => (
-          <WishComponent key={wish._id} wish={wish}>
-            <CardHeader>
-              <WishComponent.Image />
-            </CardHeader>
-            <WishComponent.Content>
-              {({ name, description }) => (
-                <>
-                  <h1>{name}</h1>
-                  <p>{description}</p>
-                </>
-              )}
-            </WishComponent.Content>
-          </WishComponent>
+          <WishWithoutStatus wish={wish} key={wish._id} />
         ))}
       </div>
     </>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import { Item, ItemContent } from "../ui/item";
 import { Spinner } from "../ui/spinner";
-import WishItem from "../wish/WishItem";
+import HomeWishItem from "../ui/wish/HomeWishItem";
 import Search from "./Search";
 
 export default function WishList() {
@@ -43,7 +43,7 @@ export default function WishList() {
       {isLoading && <Spinner className="size-20" />}
       <div className="grid w-max grid-cols-1 place-items-center gap-12 lg:grid-cols-2">
         {wishes.map((wish) => (
-          <WishItem key={wish._id} wish={wish} />
+          <HomeWishItem key={wish._id} wish={wish} />
         ))}
       </div>
       <div className="flex h-40 items-center justify-center text-center">

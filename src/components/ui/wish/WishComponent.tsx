@@ -3,9 +3,14 @@
 import { Gift, User } from "lucide-react";
 import Image from "next/image";
 import React, { type PropsWithChildren } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { BaseWish, Wish } from "@/types/Wish";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
 type WishBaseInfo = Pick<BaseWish, "_id" | "name" | "description">;
 

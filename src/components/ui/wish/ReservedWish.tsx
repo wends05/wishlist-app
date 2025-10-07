@@ -1,13 +1,11 @@
-
 import type { Wish } from "@/types/Wish";
-import { WishComponent } from "../wish/WishComponent";
-import ConfirmCancel from "./ConfirmCancel";
+import ConfirmCancel from "../../reserved/ConfirmCancel";
+import { WishComponent } from "./WishComponent";
 
 type ReservedWishProps = {
   wish: Wish;
 };
 export default function ReservedWish({ wish }: ReservedWishProps) {
-
   return (
     <WishComponent wish={wish} key={wish._id} className="h-full">
       <WishComponent.Header>

@@ -1,8 +1,8 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
+import ReservedWish from "../ui/wish/ReservedWish";
 import EmptyGrants from "./EmptyReservedWishList";
-import ReservedWish from "./ReservedWish";
 
 interface ReservedWishesPageProps {
   preloadedReservedWishes: Preloaded<typeof api.wishes.getReservedWishes>;
