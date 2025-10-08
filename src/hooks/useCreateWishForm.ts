@@ -1,35 +1,15 @@
-import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
 import { type CreateWishForm, createWishSchema } from "@/types/dto/wish";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
-import FormInput from "./FormInput";
-import FormSelect from "./FormSelect";
-import FormSubmit from "./FormSubmit";
-import FormTextArea from "./FormTextArea";
+import { useAppForm } from "./FormHooks";
 
 const defaultWish: CreateWishForm = {
   category: "",
   description: "",
   name: "",
-  localImageURL: undefined,
 };
-export const { fieldContext, formContext, useFieldContext, useFormContext } =
-  createFormHookContexts();
-
-const { useAppForm } = createFormHook({
-  fieldContext,
-  formContext,
-  fieldComponents: {
-    FormInput,
-    FormSelect,
-    FormTextArea,
-  },
-  formComponents: {
-    FormSubmit,
-  },
-});
 
 export const useCreateWishForm = () => {
   const categories = useQuery(api.categories.getAllCategories);

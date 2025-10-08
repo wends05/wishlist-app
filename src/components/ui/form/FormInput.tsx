@@ -1,22 +1,28 @@
 import { type HTMLInputTypeAttribute, useId } from "react";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { useFieldContext } from "./CreateWishForm";
+import { useFieldContext } from "@/hooks/FormHooks";
+import { Field, FieldError, FieldLabel } from "../field";
+import { Input } from "../input";
 
 interface FormInputProps {
+  name?: string;
   label: string;
   type?: HTMLInputTypeAttribute;
 }
 
-export default function FormInput({ label, type = "text" }: FormInputProps) {
+export default function FormInput({
+  label,
+  type = "text",
+  name,
+}: FormInputProps) {
   const field = useFieldContext<number | string>();
   const id = useId();
 
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+    <Field className="space-y-2">
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <div className="space-y-1">
         <Input
+          name={name ?? label.toLowerCase()}
           id={id}
           value={field.state.value}
           onChange={(e) => {
@@ -38,12 +44,8 @@ export default function FormInput({ label, type = "text" }: FormInputProps) {
           }}
           type={type}
         />
-        {field.state.meta.isValid ? null : (
-          <span className="text-destructive text-sm">
-            {field.state.meta.errors.map((err) => err.message).join(", ")}
-          </span>
-        )}
+        <FieldError errors={field.state.meta.errors} />
       </div>
-    </div>
+    </Field>
   );
 }
