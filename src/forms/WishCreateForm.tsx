@@ -2,7 +2,8 @@
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
 import type { FormEvent } from "react";
-import { useCreateWishForm } from "@/forms/CreateWishForm";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { useCreateWishForm } from "@/hooks/useCreateWishForm";
 import type { api } from "../../convex/_generated/api";
 import { Input } from "../components/ui/input";
 
@@ -45,16 +46,20 @@ export default function WishCreateForm({
         <div className="flex h-full w-1/2 flex-col items-center justify-center gap-4 *:max-w-sm *:text-center">
           <f.AppField name="localImageURL">
             {(field) => (
-              <Input
-                type="file"
-                onChange={(e) => {
-                  const file = e.target.files![0];
-                  if (!file) return;
-                  const url = URL.createObjectURL(file);
-                  field.handleChange(url);
-                }}
-                accept="image/*"
-              />
+              <Field>
+                <FieldLabel htmlFor="imageUpload">Upload Image</FieldLabel>
+                <Input
+                  id="imageUpload"
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files![0];
+                    if (!file) return;
+                    const url = URL.createObjectURL(file);
+                    field.handleChange(url);
+                  }}
+                  accept="image/*"
+                />
+              </Field>
             )}
           </f.AppField>
           <div className="m-10 flex h-60 w-full items-center justify-center rounded-2xl bg-neutral-700 p-2">

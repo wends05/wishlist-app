@@ -6,8 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "../components/ui/label";
-import { useFieldContext } from "./CreateWishForm";
+import { useFieldContext } from "@/hooks/FormHooks";
+import { Field, FieldError, FieldLabel } from "../field";
 
 interface FormSelectProps {
   label: string;
@@ -24,8 +24,8 @@ export default function FormSelect({
   const id = useId();
 
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+    <Field className="space-y-2">
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <div className="space-y-1">
         <Select value={field.state.value} onValueChange={field.handleChange}>
           <SelectTrigger id={id} className="w-full">
@@ -39,12 +39,8 @@ export default function FormSelect({
             ))}
           </SelectContent>
         </Select>
-        {field.state.meta.isValid ? null : (
-          <span className="text-destructive text-sm">
-            {field.state.meta.errors.map((err) => err.message).join(", ")}
-          </span>
-        )}
+        <FieldError errors={field.state.meta.errors} />
       </div>
-    </div>
+    </Field>
   );
 }

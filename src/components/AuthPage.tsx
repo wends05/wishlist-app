@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import LoginForm from "./auth/LoginForm";
-import RegisterForm from "./auth/RegisterForm";
+import LoginFormPage from "./auth/LoginFormPage";
+import RegisterFormPage from "./auth/RegisterFormPage";
 
 export default function AuthPage() {
   const [isOnRegister, setIsOnRegister] = useState(false);
@@ -13,9 +13,9 @@ export default function AuthPage() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
       {isOnRegister ? (
-        <RegisterForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
+        <RegisterFormPage handleToggleIsOnRegister={handleToggleIsOnRegister} />
       ) : (
-        <LoginForm handleToggleIsOnRegister={handleToggleIsOnRegister} />
+        <LoginFormPage handleToggleIsOnRegister={handleToggleIsOnRegister} />
       )}
     </div>
   );
