@@ -30,7 +30,7 @@ export default function HomeSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <Link href="/create" className="flex items-center gap-2">
-          <Button variant="outline" className="hover:text-primary mx-4">
+          <Button variant="outline" className="mx-4 hover:text-primary">
             <PlusCircleIcon />
             Create A New Wish
           </Button>

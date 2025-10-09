@@ -22,8 +22,8 @@ export const homeLinks: NavLink[] = [
   },
   {
     href: "/reserved",
-    label: "Reserved"
-  }
+    label: "Reserved",
+  },
 ];
 
 /**

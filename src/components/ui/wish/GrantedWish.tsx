@@ -16,7 +16,7 @@ export default function GrantedWish({ wish }: GrantedWishProps) {
           <div>
             <h1>{name}</h1>
             <p>{description}</p>
-            <WishComponent.GrantedBy className="text-secondary pt-5" />
+            <WishComponent.GrantedBy className="pt-5 text-secondary" />
           </div>
         )}
       </WishComponent.Content>

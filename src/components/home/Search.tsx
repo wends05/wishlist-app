@@ -16,8 +16,7 @@ interface SearchProps {
 }
 
 export default function Search({ searchQuery, setSearchQuery }: SearchProps) {
-
-  const [searchText, setSearchText] = useState(searchQuery)
+  const [searchText, setSearchText] = useState(searchQuery);
 
   // Debounce search to avoid too many queries
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
