@@ -28,6 +28,7 @@ export const getHomePageWishes = query({
   args: {
     paginationOpts: paginationOptsValidator,
     searchQuery: v.optional(v.string()),
+    categoryId: v.optional(v.id("categories")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -40,6 +41,9 @@ export const getHomePageWishes = query({
       .query("wishes")
       .withIndex("home", (q) => q.eq("status", undefined))
       .order("desc")
+      .filter((q) =>
+        q.eq(q.field("category"), args.categoryId || q.field("category")),
+      )
       .filter((q) => q.neq(q.field("owner"), userId))
       .paginate(args.paginationOpts);
 
@@ -65,6 +69,10 @@ export const getHomePageWishes = query({
       page: await Promise.all(
         searchResults
           .map((res) => res.item)
+          .filter(
+            (wish) =>
+              !args.categoryId || wish.category.toString() === args.categoryId,
+          )
           .map(async (wish) => {
             return await getWishWithFullDetails(ctx, wish);
           }),

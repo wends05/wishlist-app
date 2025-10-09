@@ -193,6 +193,10 @@
   --color-shadow-color: var(--shadow-color);
 }
 
+html {
+  @apply scroll-smooth overflow-y-scroll;
+}
+
 * {
   @apply border-border outline-ring/50;
 }
