@@ -10,8 +10,9 @@ export default async function ProfilePage() {
     {},
     {
       token: await convexAuthNextjsToken(),
-    },
+    }
   );
+
   return (
     <div className="flex h-full flex-col pt-14 pb-20 md:px-20">
       <ProfileHeader preloadedProfileDetails={preloadedProfileDetails} />
