@@ -39,9 +39,15 @@ export const getCurrentUserData = query({
 
 export const updateProfile = mutation({
   args: {
-    name: v.string(),
+    name: v.optional(v.string()),
+    address: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserDataHandler(ctx);
+
+    await ctx.db.patch(user._id, {
+      name: args.name ?? user.name,
+      address: args.address ?? user.address,
+    })
   },
 });

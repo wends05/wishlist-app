@@ -12,6 +12,7 @@ export default defineSchema({
     phone: v.optional(v.string()),
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
+    address: v.optional(v.string()),
   }).index("by_email", ["email"]),
   wishes: defineTable({
     name: v.string(),
@@ -25,8 +26,8 @@ export default defineSchema({
       v.union(
         v.literal("pending"),
         v.literal("completed"),
-        v.literal("cancelled"),
-      ),
+        v.literal("cancelled")
+      )
     ),
   })
     .index("by_owner", ["owner"])

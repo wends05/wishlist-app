@@ -1,6 +1,8 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import type { api } from "../../../convex/_generated/api";
+import { Button } from "../ui/button";
+import EditProfileModal from "./EditProfileDialog";
 
 interface ProfileHeaderProps {
   preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserData>;
@@ -16,8 +18,11 @@ export default function ProfileHeader({
         <div className="size-40 rounded-full bg-slate-900" />
       </div>
       <div className="flex flex-col justify-center pl-8">
-        <h2>{profileDetails.name}</h2>
-        <h3>{profileDetails.email}</h3>
+        <div className="pb-4">
+          <h2>{profileDetails.name}</h2>
+          <h3>{profileDetails.email}</h3>
+        </div>
+      <EditProfileModal profileDetails={profileDetails} />
       </div>
     </div>
   );
