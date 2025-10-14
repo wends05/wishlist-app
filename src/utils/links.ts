@@ -17,10 +17,6 @@ export const homeLinks: NavLink[] = [
     label: "Home",
   },
   {
-    href: "/profile",
-    label: "Profile",
-  },
-  {
     href: "/reserved",
     label: "Reserved",
   },

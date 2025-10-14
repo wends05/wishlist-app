@@ -1,7 +1,9 @@
 "use client";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { homeLinks } from "@/utils/links";
+import type { api } from "../../../convex/_generated/api";
 import LogoutButton from "../LogoutButton";
 import { Button } from "../ui/button";
 import {
@@ -10,14 +12,25 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "../ui/sidebar";
+import ProfileButton from "./ProfileButton";
 
-export default function HomeSidebar() {
+interface HomeSidebarProps {
+  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserData>;
+}
+
+export default function HomeSidebar({
+  preloadedProfileDetails,
+}: HomeSidebarProps) {
+  const profileDetails = usePreloadedQuery(preloadedProfileDetails);
   return (
     <Sidebar variant="inset">
-      <SidebarContent>
-        <SidebarHeader className="text-center">
-          <h2>Wishlist App</h2>
-        </SidebarHeader>
+      <SidebarHeader className="pt-4 text-center">
+        <ProfileButton
+          name={profileDetails?.name || ""}
+          imageUrl={profileDetails?.image || ""}
+        />
+      </SidebarHeader>
+      <SidebarContent className="pt-4">
         <div className="flex flex-col gap-3 px-4">
           {homeLinks.map((link) => (
             <Link href={link.href} key={link.href} className="flex w-full">
