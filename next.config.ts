@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         hostname: "picsum.photos",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
     ],
   },
   allowedDevOrigins: [process.env.CLIENT_ORIGIN!],

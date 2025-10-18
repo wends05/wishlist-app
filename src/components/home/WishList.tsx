@@ -5,7 +5,7 @@ import {
   usePreloadedQuery,
 } from "convex/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { Item, ItemContent } from "../ui/item";
@@ -21,11 +21,11 @@ interface WishListProps {
 export default function WishList({ preloadedCategories }: WishListProps) {
   const filterCategories = usePreloadedQuery(preloadedCategories);
 
+  const [categoryId, setCategoryId] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const searchQuery = searchParams.get("search");
-  const categoryId = searchParams.get("category");
 
   const setSearchQuery = (query: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -38,14 +38,9 @@ export default function WishList({ preloadedCategories }: WishListProps) {
   };
 
   const setFilterCategory = (categoryId: string | undefined) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (categoryId) {
-      params.set("category", categoryId);
-    } else {
-      params.delete("category");
-    }
-    router.push(`?${params.toString()}`);
+    setCategoryId(categoryId || null);
   };
+
   const {
     results: wishes,
     loadMore,
@@ -59,7 +54,7 @@ export default function WishList({ preloadedCategories }: WishListProps) {
     },
     {
       initialNumItems: 5,
-    },
+    }
   );
   useEffect(() => {
     const handleScroll = () => {
