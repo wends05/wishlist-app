@@ -2,7 +2,7 @@
 
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import EditProfileForm from "@/forms/EditProfileForm";
-import type { api } from "../../../convex/_generated/api";
+import type { api } from "../../../../../../convex/_generated/api";
 
 interface EditProfilePageProps {
   preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserData>;

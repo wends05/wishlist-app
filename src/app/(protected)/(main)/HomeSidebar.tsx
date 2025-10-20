@@ -2,16 +2,16 @@
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
-import { homeLinks } from "@/utils/links";
-import type { api } from "../../../convex/_generated/api";
-import LogoutButton from "../LogoutButton";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "../ui/sidebar";
+} from "@/components/ui/sidebar";
+import { homeLinks } from "@/utils/links";
+import type { api } from "../../../../convex/_generated/api";
+import LogoutButton from "./LogoutButton";
 import ProfileButton from "./ProfileButton";
 
 interface HomeSidebarProps {

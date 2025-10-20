@@ -1,7 +1,7 @@
 import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface ProfileButtonProps {
   name: string;

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { Doc } from "../../../convex/_generated/dataModel";
-import { Button } from "../ui/button";
+import type { Doc } from "../../../../../../convex/_generated/dataModel";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -9,7 +9,7 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 
 interface EditProfileModalProps {
   profileDetails: Doc<"users">;

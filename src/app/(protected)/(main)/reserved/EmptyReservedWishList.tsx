@@ -1,6 +1,11 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyTitle } from "../ui/empty";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 export default function EmptyGrants() {
   return (

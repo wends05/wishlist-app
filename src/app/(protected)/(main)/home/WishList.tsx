@@ -6,11 +6,11 @@ import {
 } from "convex/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
-import { Item, ItemContent } from "../ui/item";
-import { Spinner } from "../ui/spinner";
-import HomeWishItem from "../ui/wish/HomeWishItem";
+import { Item, ItemContent } from "@/components/ui/item";
+import { Spinner } from "@/components/ui/spinner";
+import HomeWishItem from "@/components/ui/wish/HomeWishItem";
+import { api } from "../../../../../convex/_generated/api";
+import type { Id } from "../../../../../convex/_generated/dataModel";
 import FilterButton from "./FilterButton";
 import Search from "./Search";
 

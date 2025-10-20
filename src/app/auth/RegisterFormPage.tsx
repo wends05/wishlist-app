@@ -1,5 +1,4 @@
-import RegisterForm from "@/forms/RegisterForm";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -7,7 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
+import RegisterForm from "@/forms/RegisterForm";
 
 interface RegisterFormProps {
   handleToggleIsOnRegister: () => void;

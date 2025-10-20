@@ -1,6 +1,6 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import EditProfilePage from "@/components/profile/EditProfilePage";
+import EditProfilePage from "@/app/(protected)/(main)/profile/edit/EditProfilePage";
 import { api } from "../../../../../../convex/_generated/api";
 
 export default async function Edit() {

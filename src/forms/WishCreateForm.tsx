@@ -3,9 +3,9 @@ import { type Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
 import type { FormEvent } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { useCreateWishForm } from "@/hooks/useCreateWishForm";
 import type { api } from "../../convex/_generated/api";
-import { Input } from "../components/ui/input";
 
 interface WishCreateFormProps {
   preloadedCategories: Preloaded<typeof api.categories.getAllCategories>;
