@@ -9,7 +9,7 @@ export default async function Edit() {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
   return <EditProfilePage preloadedProfileDetails={preloadedProfileDetails} />;
 }

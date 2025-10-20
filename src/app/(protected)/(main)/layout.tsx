@@ -15,7 +15,7 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 
   return (

@@ -9,7 +9,7 @@ export default async function Reserved() {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
   return (
     <ReservedWishesPage preloadedReservedWishes={preloadedReservedWishes} />

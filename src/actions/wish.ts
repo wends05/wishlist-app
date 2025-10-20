@@ -12,7 +12,7 @@ export const createWish = async (data: CreateWishForm) => {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
   if (!userData) {
     throw new Error("Unauthorized");
@@ -22,7 +22,7 @@ export const createWish = async (data: CreateWishForm) => {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 
   if (!categories) {
@@ -37,7 +37,7 @@ export const createWish = async (data: CreateWishForm) => {
       {},
       {
         token: await convexAuthNextjsToken(),
-      }
+      },
     );
 
     const imageFile = await fetch(data.localImageURL).then((res) => res.blob());
@@ -72,6 +72,6 @@ export const createWish = async (data: CreateWishForm) => {
     },
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 };

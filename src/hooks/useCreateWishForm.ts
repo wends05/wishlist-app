@@ -36,7 +36,7 @@ export const useCreateWishForm = () => {
         formApi.reset();
       } catch (err) {
         toast.error(
-          err instanceof Error ? err.message : "Something went wrong"
+          err instanceof Error ? err.message : "Something went wrong",
         );
       }
     },

@@ -54,7 +54,7 @@ export default function WishList({ preloadedCategories }: WishListProps) {
     },
     {
       initialNumItems: 5,
-    }
+    },
   );
   useEffect(() => {
     const handleScroll = () => {

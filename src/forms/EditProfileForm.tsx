@@ -25,7 +25,10 @@ export default function EditProfileForm({
           {(form) => <form.FormInput label="Address" />}
         </f.AppField>
         <f.AppForm>
-          <f.FormSubmit label="Edit Profile Details" isSubmittingLabel="Editing Profile..." />
+          <f.FormSubmit
+            label="Edit Profile Details"
+            isSubmittingLabel="Editing Profile..."
+          />
         </f.AppForm>
       </div>
     </form>

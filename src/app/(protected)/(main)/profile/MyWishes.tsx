@@ -12,7 +12,7 @@ export default async function MyWishes() {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 
   const preloadedWishesWithoutStatus = await preloadQuery(
@@ -20,7 +20,7 @@ export default async function MyWishes() {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 
   return (

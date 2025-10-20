@@ -8,7 +8,7 @@ export default async function HomePage() {
   const preloadedCategories = await preloadQuery(
     api.categories.getAllFilterCategories,
     {},
-    { token: await convexAuthNextjsToken() }
+    { token: await convexAuthNextjsToken() },
   );
 
   return (
