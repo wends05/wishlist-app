@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import LoginFormPage from "./auth/LoginFormPage";
-import RegisterFormPage from "./auth/RegisterFormPage";
+import LoginFormPage from "./LoginFormPage";
+import RegisterFormPage from "./RegisterFormPage";
 
 export default function AuthPage() {
   const [isOnRegister, setIsOnRegister] = useState(false);

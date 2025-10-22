@@ -1,7 +1,7 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import HomeHeader from "@/components/home/HomeHeader";
-import HomeSidebar from "@/components/home/HomeSidebar";
+import HomeSidebar from "@/app/(protected)/(main)/HomeSidebar";
+import HomeHeader from "@/app/(protected)/(main)/home/HomeHeader";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { api } from "../../../../convex/_generated/api";
 
@@ -15,7 +15,7 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
     {},
     {
       token: await convexAuthNextjsToken(),
-    }
+    },
   );
 
   return (

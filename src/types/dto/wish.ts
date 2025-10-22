@@ -12,3 +12,7 @@ export type CreateWishForm = Pick<Doc<"wishes">, "name" | "description"> & {
   category: string;
   localImageURL?: string;
 };
+
+export type CreateWishAction = Omit<CreateWishForm, "localImageURL"> & {
+  imageId: string | null;
+};

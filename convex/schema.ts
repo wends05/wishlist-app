@@ -26,8 +26,8 @@ export default defineSchema({
       v.union(
         v.literal("pending"),
         v.literal("completed"),
-        v.literal("cancelled")
-      )
+        v.literal("cancelled"),
+      ),
     ),
   })
     .index("by_owner", ["owner"])

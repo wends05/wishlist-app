@@ -15,7 +15,8 @@
       "!build",
       "!_generated",
       "!*.lock",
-      "!ui"
+      "!src/components/ui",
+      "!convex/_generated"
     ]
   },
   "formatter": {

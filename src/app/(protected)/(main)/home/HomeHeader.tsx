@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { getRouteTitle, homeLinks } from "@/utils/links";
-import { Button } from "../ui/button";
-import { SidebarTrigger, useSidebar } from "../ui/sidebar";
 
 const HomeHeader = () => {
   const { open } = useSidebar();

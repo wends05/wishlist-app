@@ -1,6 +1,6 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import ReservedWishesPage from "@/components/reserved/ReservedWishesPage";
+import ReservedWishesPage from "@/app/(protected)/(main)/reserved/ReservedWishesPage";
 import { api } from "../../../../../convex/_generated/api";
 
 export default async function Reserved() {

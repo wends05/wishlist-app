@@ -1,14 +1,14 @@
 import { Filter, X } from "lucide-react";
 import type { MouseEvent } from "react";
-import type { Doc } from "../../../convex/_generated/dataModel";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
+import type { Doc } from "../../../../../convex/_generated/dataModel";
 
 interface FilterButtonProps {
   filterCategories: Pick<Doc<"categories">, "name" | "_id">[];

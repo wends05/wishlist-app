@@ -8,7 +8,7 @@ import {
   InputGroupButton,
   InputGroupInput,
   InputGroupText,
-} from "../ui/input-group";
+} from "@/components/ui/input-group";
 
 interface SearchProps {
   searchQuery?: string;

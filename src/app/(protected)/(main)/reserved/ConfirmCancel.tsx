@@ -1,8 +1,6 @@
 "use client";
 import { useMutation } from "convex/react";
 import { Ban } from "lucide-react";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,8 +10,10 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { api } from "../../../../../convex/_generated/api";
+import type { Id } from "../../../../../convex/_generated/dataModel";
 
 interface ConfirmCancelProps {
   wishId: Id<"wishes">;

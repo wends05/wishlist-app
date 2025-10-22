@@ -1,7 +1,5 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import LoginForm from "@/forms/LoginForm";
-import { useLoginForm } from "@/hooks/useLoginForm";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -9,8 +7,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Separator } from "../ui/separator";
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import LoginForm from "@/forms/LoginForm";
+import { useLoginForm } from "@/hooks/useLoginForm";
 
 interface LoginFormProps {
   handleToggleIsOnRegister: () => void;
@@ -29,7 +29,11 @@ export default function LoginFormPage({
         </CardTitle>
         <CardDescription>Get started with your account</CardDescription>
         <CardAction>
-          <Button variant={"link"} onClick={handleToggleIsOnRegister}>
+          <Button
+            variant={"link"}
+            onClick={handleToggleIsOnRegister}
+            className="text-neutral-600 dark:text-primary"
+          >
             Sign up here
           </Button>
         </CardAction>

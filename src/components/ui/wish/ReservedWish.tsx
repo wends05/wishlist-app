@@ -1,5 +1,5 @@
 import type { Wish } from "@/types/Wish";
-import ConfirmCancel from "../../reserved/ConfirmCancel";
+import ConfirmCancel from "../../../app/(protected)/(main)/reserved/ConfirmCancel";
 import { WishComponent } from "./WishComponent";
 
 type ReservedWishProps = {

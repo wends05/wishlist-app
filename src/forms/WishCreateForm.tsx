@@ -3,9 +3,9 @@ import { type Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
 import type { FormEvent } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { useCreateWishForm } from "@/hooks/useCreateWishForm";
 import type { api } from "../../convex/_generated/api";
-import { Input } from "../components/ui/input";
 
 interface WishCreateFormProps {
   preloadedCategories: Preloaded<typeof api.categories.getAllCategories>;
@@ -57,7 +57,7 @@ export default function WishCreateForm({
                     const url = URL.createObjectURL(file);
                     field.handleChange(url);
                   }}
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg"
                 />
               </Field>
             )}
@@ -74,7 +74,9 @@ export default function WishCreateForm({
                       className="rounded-md object-cover"
                     />
                   ) : (
-                    <span>Upload an image to see a preview here</span>
+                    <span className="text-neutral-300">
+                      Upload an image to see a preview here
+                    </span>
                   )
                 }
               </f.Subscribe>

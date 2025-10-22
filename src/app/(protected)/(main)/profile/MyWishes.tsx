@@ -1,8 +1,8 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import { api } from "../../../convex/_generated/api";
-import { Card, CardContent } from "../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { api } from "../../../../../convex/_generated/api";
 import GrantedWishes from "./GrantedWishes";
 import WishesWithoutStatus from "./WishesWithoutStatus";
 

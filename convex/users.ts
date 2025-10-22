@@ -48,6 +48,6 @@ export const updateProfile = mutation({
     await ctx.db.patch(user._id, {
       name: args.name ?? user.name,
       address: args.address ?? user.address,
-    })
+    });
   },
 });

@@ -1,5 +1,4 @@
-import RegisterForm from "@/forms/RegisterForm";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -7,7 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
+import RegisterForm from "@/forms/RegisterForm";
 
 interface RegisterFormProps {
   handleToggleIsOnRegister: () => void;
@@ -24,7 +24,7 @@ export default function RegisterFormPage({
         </CardTitle>
         <CardDescription>Get started with your account</CardDescription>
         <CardAction>
-          <Button variant={"link"} onClick={handleToggleIsOnRegister}>
+          <Button variant={"link"} onClick={handleToggleIsOnRegister} className="text-neutral-600 dark:text-primary">
             Sign in here
           </Button>
         </CardAction>
