@@ -57,7 +57,7 @@ export default function WishCreateForm({
                     const url = URL.createObjectURL(file);
                     field.handleChange(url);
                   }}
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg"
                 />
               </Field>
             )}
@@ -74,7 +74,9 @@ export default function WishCreateForm({
                       className="rounded-md object-cover"
                     />
                   ) : (
-                    <span>Upload an image to see a preview here</span>
+                    <span className="text-neutral-300">
+                      Upload an image to see a preview here
+                    </span>
                   )
                 }
               </f.Subscribe>
