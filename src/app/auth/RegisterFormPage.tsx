@@ -24,7 +24,7 @@ export default function RegisterFormPage({
         </CardTitle>
         <CardDescription>Get started with your account</CardDescription>
         <CardAction>
-          <Button variant={"link"} onClick={handleToggleIsOnRegister}>
+          <Button variant={"link"} onClick={handleToggleIsOnRegister} className="text-neutral-600 dark:text-primary">
             Sign in here
           </Button>
         </CardAction>
