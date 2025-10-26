@@ -1,9 +1,6 @@
 "use client";
-import {
-  type Preloaded,
-  usePaginatedQuery,
-  usePreloadedQuery,
-} from "convex/react";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
+import { usePaginatedQuery } from "convex-helpers/react/cache/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Item, ItemContent } from "@/components/ui/item";
@@ -54,7 +51,7 @@ export default function WishList({ preloadedCategories }: WishListProps) {
     },
     {
       initialNumItems: 5,
-    },
+    }
   );
   useEffect(() => {
     const handleScroll = () => {
