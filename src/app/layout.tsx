@@ -1,3 +1,4 @@
+import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import type { Metadata } from "next";
 import { Albert_Sans } from "next/font/google";
 import "./globals.css";
@@ -26,10 +27,16 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={`${albertSans.variable} antialiased`}>
           <ConvexClientProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <Toaster />
-              {children}
-            </ThemeProvider>
+            <ConvexQueryCacheProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+              >
+                <Toaster />
+                {children}
+              </ThemeProvider>
+            </ConvexQueryCacheProvider>
           </ConvexClientProvider>
         </body>
       </html>

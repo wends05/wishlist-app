@@ -1,4 +1,5 @@
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache/hooks";
 import { toast } from "sonner";
 import { createWish } from "@/actions/wish";
 import { type CreateWishForm, createWishSchema } from "@/types/dto/wish";
