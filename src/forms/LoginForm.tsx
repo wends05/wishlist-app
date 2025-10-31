@@ -21,7 +21,7 @@ export default function LoginForm() {
           )}
         </f.AppField>
         <f.AppForm>
-          <f.FormSubmit />
+          <f.FormSubmit label="Log In" isSubmittingLabel="Logging Ing" />
         </f.AppForm>
       </div>
     </form>

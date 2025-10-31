@@ -82,7 +82,7 @@ export default function WishList({ preloadedCategories }: WishListProps) {
         />
       </div>
       {isLoading && <Spinner className="size-20" />}
-      <div className="grid h-full w-max grid-cols-1 place-items-center gap-12 lg:grid-cols-2">
+      <div className="grid h-full w-full grid-cols-1 place-items-center gap-12 lg:grid-cols-2">
         {wishes.map((wish) => (
           <HomeWishItem key={wish._id} wish={wish} />
         ))}

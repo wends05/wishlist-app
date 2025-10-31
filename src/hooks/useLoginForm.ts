@@ -1,5 +1,4 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useState } from "react";
 import { toast } from "sonner";
 import {
   type AuthFormMeta,
@@ -19,18 +18,6 @@ const defaultMeta: AuthFormMeta = {
 
 export const useLoginForm = () => {
   const { signIn } = useAuthActions();
-
-  const [signingInGithub, setSigningInGithub] = useState(false);
-
-  const handleSignInGithub = async () => {
-    setSigningInGithub(true);
-    try {
-      await signIn("github");
-    } catch {
-      toast.error("Failed to sign in with Github");
-    }
-    setSigningInGithub(false);
-  };
 
   const form = useAppForm({
     defaultValues: defaultLoginData,
@@ -52,7 +39,5 @@ export const useLoginForm = () => {
 
   return {
     form,
-    handleSignInGithub,
-    signingInGithub,
   };
 };

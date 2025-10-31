@@ -27,7 +27,7 @@ export default function RegisterForm() {
         {(form) => <form.FormInput label="Confirm Password" type="password" />}
       </f.AppField>
       <f.AppForm>
-        <f.FormSubmit />
+        <f.FormSubmit label="Sign Up" isSubmittingLabel="Signing Up" />
       </f.AppForm>
     </form>
   );
