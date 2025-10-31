@@ -24,7 +24,7 @@ const useWishItem = () => {
   const context = React.useContext(WishItemContext);
   if (!context) {
     throw new Error(
-      "WishItem compound components must be used within WishItem",
+      "WishItem compound components must be used within WishItem"
     );
   }
   return context;
@@ -40,7 +40,7 @@ interface WishItemRootProps {
 function WishItemRoot({ wish, children, className }: WishItemRootProps) {
   return (
     <WishItemContext.Provider value={{ wish }}>
-      <Card className={className}>{children}</Card>
+      <Card className={cn("w-full", className)}>{children}</Card>
     </WishItemContext.Provider>
   );
 }

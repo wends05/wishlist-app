@@ -53,7 +53,7 @@ export default function HomeWishItem({ wish }: WishItemProps) {
         )}
       </WishComponent.Content>
       <WishComponent.Footer>
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-between gap-5">
           <WishComponent.Owner />
           <div className="flex gap-2">
             <Button onClick={handleReserveWish}>Reserve</Button>

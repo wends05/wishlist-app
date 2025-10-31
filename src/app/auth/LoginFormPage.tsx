@@ -19,8 +19,6 @@ interface LoginFormProps {
 export default function LoginFormPage({
   handleToggleIsOnRegister,
 }: LoginFormProps) {
-  const { handleSignInGithub, signingInGithub } = useLoginForm();
-
   return (
     <Card className="w-full max-w-sm px-3">
       <CardHeader>
@@ -40,21 +38,6 @@ export default function LoginFormPage({
       </CardHeader>
       <CardContent>
         <LoginForm />
-        <div className="flex flex-col gap-3 py-5 text-center">
-          <Separator />
-          <div>or</div>
-          <Separator />
-        </div>
-        <div className="space-y-2">
-          <h4>Log in with</h4>
-          <div className="flex flex-col gap-2">
-            {/* <Button>Google</Button> */}
-            <Button onClick={handleSignInGithub}>
-              <SiGithub className="mr-2 h-4 w-4" />
-              {signingInGithub ? "Signing in..." : "Github"}
-            </Button>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
