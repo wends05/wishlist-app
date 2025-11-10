@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import { Separator } from "@/components/ui/separator";
 import { useLoginForm } from "@/hooks/useLoginForm";
 
 export default function LoginForm() {
