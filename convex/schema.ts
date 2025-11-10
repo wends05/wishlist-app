@@ -13,7 +13,7 @@ export default defineSchema({
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
     address: v.optional(v.string()),
-  }).index("by_email", ["email"]),
+  }).index("email", ["email"]),
   wishes: defineTable({
     name: v.string(),
     description: v.string(),

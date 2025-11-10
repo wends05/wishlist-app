@@ -8,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import LoginForm from "@/forms/LoginForm";
-import { useLoginForm } from "@/hooks/useLoginForm";
+import GithubSignInSection from "./GithubSignInSection";
 
 interface LoginFormProps {
   handleToggleIsOnRegister: () => void;
@@ -38,6 +37,7 @@ export default function LoginFormPage({
       </CardHeader>
       <CardContent>
         <LoginForm />
+        <GithubSignInSection />
       </CardContent>
     </Card>
   );
