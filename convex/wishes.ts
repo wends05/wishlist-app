@@ -10,17 +10,37 @@ import {
   type QueryCtx,
   query,
 } from "./_generated/server";
-import { checkUserIdentity, getCurrentUserDataHandler } from "./users";
+import { getCurrentUserData } from "./users";
 
 /**
  * Queries
  */
-export const findWishes = query({
-  args: {},
-  handler: async (ctx, _args) => {
-    await checkUserIdentity(ctx);
-    const wish = await ctx.db.query("wishes").take(5);
-    return wish;
+
+export const getWishById = query({
+  args: {
+    wishId: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    await getCurrentUserData(ctx);
+    const wish = await ctx.db.get(args.wishId);
+    if (!wish) {
+      throw new ConvexError("Wish not found");
+    }
+    return await getWishWithFullDetails(ctx, wish);
+  },
+});
+
+export const getWishByIdWithCategory = query({
+  args: {
+    wishId: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    await getCurrentUserData(ctx);
+    const wish = await ctx.db.get(args.wishId);
+    if (!wish) {
+      throw new ConvexError("Wish not found");
+    }
+    return await getWishWithCategoryDetails(ctx, wish);
   },
 });
 
@@ -42,7 +62,7 @@ export const getHomePageWishes = query({
       .withIndex("home", (q) => q.eq("status", undefined))
       .order("desc")
       .filter((q) =>
-        q.eq(q.field("category"), args.categoryId || q.field("category")),
+        q.eq(q.field("category"), args.categoryId || q.field("category"))
       )
       .filter((q) => q.neq(q.field("owner"), userId))
       .paginate(args.paginationOpts);
@@ -53,7 +73,7 @@ export const getHomePageWishes = query({
         page: await Promise.all(
           wishResults.page.map(async (wish) => {
             return await getWishWithFullDetails(ctx, wish);
-          }),
+          })
         ),
       };
     }
@@ -71,11 +91,11 @@ export const getHomePageWishes = query({
           .map((res) => res.item)
           .filter(
             (wish) =>
-              !args.categoryId || wish.category.toString() === args.categoryId,
+              !args.categoryId || wish.category.toString() === args.categoryId
           )
           .map(async (wish) => {
             return await getWishWithFullDetails(ctx, wish);
-          }),
+          })
       ),
     };
   },
@@ -150,7 +170,7 @@ export const getGrantedWishes = query({
             name: grantor.name,
           },
         };
-      }),
+      })
     );
   },
 });
@@ -167,12 +187,12 @@ export const getReservedWishes = query({
     const wishes = await ctx.db
       .query("wishes")
       .withIndex("by_grantor_status", (q) =>
-        q.eq("grantor", userId).eq("status", "pending"),
+        q.eq("grantor", userId).eq("status", "pending")
       )
       .collect();
 
     return await Promise.all(
-      wishes.map(async (wish) => getWishWithFullDetails(ctx, wish)),
+      wishes.map(async (wish) => getWishWithFullDetails(ctx, wish))
     );
   },
 });
@@ -188,10 +208,7 @@ export const createWish = mutation({
     category: v.id("categories"),
   },
   handler: async (ctx, args) => {
-    const user = await getCurrentUserDataHandler(ctx);
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+    const user = await getCurrentUserData(ctx);
 
     let receivedStorageUrl: string | null = null;
     if (args.imageId) {
@@ -206,6 +223,7 @@ export const createWish = mutation({
       description: args.description,
       category: args.category,
       imageUrl: receivedStorageUrl ?? "",
+      imageId: args.imageId,
       owner: user._id,
       updatedAt: Date.now(),
     });
@@ -216,7 +234,7 @@ export const createWish = mutation({
 export const generateUploadURL = mutation({
   args: {},
   handler: async (ctx, _args) => {
-    await checkUserIdentity(ctx);
+    await getCurrentUserData(ctx);
     const url = await ctx.storage.generateUploadUrl();
     return url;
   },
@@ -283,11 +301,66 @@ export const reserveWish = mutation({
   },
 });
 
+export const editWish = mutation({
+  args: {
+    wish: v.object({
+      _id: v.id("wishes"),
+      name: v.string(),
+      description: v.string(),
+      imageId: v.optional(v.id("_storage")),
+      removeImage: v.boolean(),
+      category: v.id("categories"),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserData(ctx);
+
+    const originalWish = await ctx.db.get(args.wish._id);
+    if (!originalWish) {
+      throw new Error("Wish not found");
+    }
+
+    // Check if the user is the owner of the wish
+    if (originalWish.owner.toString() !== user._id) {
+      throw new Error("You are not the owner of this wish");
+    }
+
+    //
+    let receivedStorageUrl: string | null = null;
+    if (args.wish.removeImage) {
+      if (originalWish.imageId) {
+        await ctx.storage.delete(originalWish.imageId);
+      }
+      receivedStorageUrl = null;
+    } else if (args.wish.imageId) {
+      receivedStorageUrl = await getImageURL(ctx, args.wish.imageId);
+      if (!receivedStorageUrl) {
+        throw new ConvexError("Failed to get image URL");
+      }
+
+      if (originalWish.imageId && originalWish.imageId !== args.wish.imageId) {
+        await ctx.storage.delete(originalWish.imageId);
+      }
+    }
+
+    // Update the wish with the new values
+    const updatedWish = await ctx.db.patch(args.wish._id, {
+      name: args.wish.name,
+      description: args.wish.description,
+      imageUrl: receivedStorageUrl ?? "",
+      category: args.wish.category,
+      imageId: args.wish.imageId,
+    });
+
+    return updatedWish;
+  },
+});
+
 /**
  * Utils
  */
 const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
-  await checkUserIdentity(ctx);
+  await getCurrentUserData(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };
@@ -309,14 +382,14 @@ const getUserWishes = async (ctx: QueryCtx) => {
 
 const getUserWishesByStatus = async (
   ctx: QueryCtx,
-  status?: Doc<"wishes">["status"],
+  status?: Doc<"wishes">["status"]
 ) => {
   const userWishes = await getUserWishes(ctx);
 
   const filteredWishes = userWishes.filter((w) => w.status === status);
 
   return await Promise.all(
-    filteredWishes.map(async (wish) => getWishWithCategoryDetails(ctx, wish)),
+    filteredWishes.map(async (wish) => getWishWithCategoryDetails(ctx, wish))
   );
 };
 
@@ -346,7 +419,7 @@ const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
 };
 const getWishWithCategoryDetails = async (
   ctx: QueryCtx,
-  wish: Doc<"wishes">,
+  wish: Doc<"wishes">
 ) => {
   const category = await ctx.db.get(wish.category);
 

@@ -1,15 +1,17 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { mutation, type QueryCtx, query } from "./_generated/server";
 
 /**
  * Utils
  */
-export const getCurrentUserDataHandler = async (ctx: QueryCtx) => {
+export const getCurrentUserData = async (ctx: QueryCtx) => {
   const userId = await getAuthUserId(ctx);
 
+  console.log('USERID, getCurrentUserData', userId);
+
   if (!userId) {
-    throw new Error("Unauthorized");
+    throw new ConvexError("Unauthorized");
   }
 
   const user = await ctx.db.get(userId);
@@ -17,20 +19,12 @@ export const getCurrentUserDataHandler = async (ctx: QueryCtx) => {
   return user!;
 };
 
-export const checkUserIdentity = async (ctx: QueryCtx) => {
-  const identity = await ctx.auth.getUserIdentity();
-  if (!identity) {
-    throw new Error("Unauthorized");
-  }
-  return identity;
-};
-
 /**
  * Queries
  */
-export const getCurrentUserData = query({
+export const getCurrentUserDataHandler = query({
   args: {},
-  handler: getCurrentUserDataHandler,
+  handler: getCurrentUserData,
 });
 
 /**
@@ -43,7 +37,7 @@ export const updateProfile = mutation({
     address: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const user = await getCurrentUserDataHandler(ctx);
+    const user = await getCurrentUserData(ctx);
 
     await ctx.db.patch(user._id, {
       name: args.name ?? user.name,

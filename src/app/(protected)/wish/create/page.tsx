@@ -1,0 +1,31 @@
+import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
+import { preloadQuery } from "convex/nextjs";
+import BackButton from "@/components/BackButton";
+import { CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import WishCreateForm from "@/forms/WishCreateForm";
+import { api } from "../../../../../convex/_generated/api";
+
+export default async function CreateWishPage() {
+  const preloadedCategories = await preloadQuery(
+    api.categories.getAllCategories,
+    {},
+    {
+      token: await convexAuthNextjsToken(),
+    }
+  );
+
+  return (
+    <>
+      <CardHeader>
+        <h2>Create a new wish</h2>
+        <CardAction>
+          <BackButton />
+        </CardAction>
+      </CardHeader>
+      <CardContent className="flex h-full w-full flex-col gap-4">
+        <p>Fill out the form below to create a new wish.</p>
+        <WishCreateForm preloadedCategories={preloadedCategories} />
+      </CardContent>
+    </>
+  );
+}

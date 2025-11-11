@@ -6,7 +6,7 @@ import { api } from "../../../../../convex/_generated/api";
 
 export default async function ProfilePage() {
   const preloadedProfileDetails = await preloadQuery(
-    api.users.getCurrentUserData,
+    api.users.getCurrentUserDataHandler,
     {},
     {
       token: await convexAuthNextjsToken(),

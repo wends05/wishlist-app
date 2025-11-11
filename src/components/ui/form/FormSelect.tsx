@@ -9,9 +9,13 @@ import {
 import { useFieldContext } from "@/hooks/FormHooks";
 import { Field, FieldError, FieldLabel } from "../field";
 
+type FormSelectItem = {
+  id:string;
+  name: string;
+};
 interface FormSelectProps {
   label: string;
-  items: string[];
+  items: FormSelectItem[];
   placeholder: string;
 }
 
@@ -33,8 +37,8 @@ export default function FormSelect({
           </SelectTrigger>
           <SelectContent>
             {items.map((item) => (
-              <SelectItem key={item} value={item}>
-                {item}
+              <SelectItem key={item.id} value={item.name}>
+                {item.name}
               </SelectItem>
             ))}
           </SelectContent>

@@ -15,7 +15,7 @@ const HomeHeader = () => {
         <SidebarTrigger /> <h3>{getRouteTitle(pathName, homeLinks)}</h3>
       </div>
       {!open && (
-        <Link href={"/create"}>
+        <Link href={"/wish/create"}>
           <Button
             variant={"outline"}
             className="fixed right-8 hover:text-primary"
