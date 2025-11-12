@@ -37,7 +37,10 @@ export default function WishCreateForm({
             {(field) => (
               <field.FormSelect
                 label="Category"
-                items={categories.map((category) => category.name)}
+                items={categories.map((category) => ({
+                  id: category._id,
+                  name: category.name,
+                }))}
                 placeholder="Select a category"
               />
             )}
@@ -62,7 +65,7 @@ export default function WishCreateForm({
               </Field>
             )}
           </f.AppField>
-          <div className="m-10 flex h-60 w-full items-center justify-center rounded-2xl bg-neutral-700 p-2">
+          <div className="flex h-60 w-full items-center justify-center rounded-2xl bg-neutral-700 p-2">
             <div className="relative flex h-full w-full items-center justify-center rounded-md text-center">
               <f.Subscribe selector={(s) => s.values.localImageURL}>
                 {(localImageURL) =>

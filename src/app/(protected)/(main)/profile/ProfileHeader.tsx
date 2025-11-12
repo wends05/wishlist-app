@@ -4,7 +4,7 @@ import EditProfileModal from "@/app/(protected)/(main)/profile/edit/EditProfileD
 import type { api } from "../../../../../convex/_generated/api";
 
 interface ProfileHeaderProps {
-  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserData>;
+  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserDataHandler>;
 }
 
 export default function ProfileHeader({

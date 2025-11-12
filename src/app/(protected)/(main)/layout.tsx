@@ -11,7 +11,7 @@ interface HomeLayoutProps {
 
 export default async function HomeLayout({ children }: HomeLayoutProps) {
   const preloadedProfileDetails = await preloadQuery(
-    api.users.getCurrentUserData,
+    api.users.getCurrentUserDataHandler,
     {},
     {
       token: await convexAuthNextjsToken(),

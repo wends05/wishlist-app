@@ -15,7 +15,7 @@ import LogoutButton from "./LogoutButton";
 import ProfileButton from "./ProfileButton";
 
 interface HomeSidebarProps {
-  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserData>;
+  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserDataHandler>;
 }
 
 export default function HomeSidebar({
@@ -42,7 +42,7 @@ export default function HomeSidebar({
         </div>
       </SidebarContent>
       <SidebarFooter>
-        <Link href="/create" className="flex items-center gap-2">
+        <Link href="/wish/create" className="flex items-center gap-2">
           <Button variant="outline" className="mx-4 hover:text-primary">
             <PlusCircleIcon />
             Create A New Wish

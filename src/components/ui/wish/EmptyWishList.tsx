@@ -27,7 +27,7 @@ export default function EmptyWishList({
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Link href={"/create"}>
+        <Link href={"/wish/create"}>
           <Button>Create a Wish</Button>
         </Link>
       </EmptyContent>

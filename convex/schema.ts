@@ -26,9 +26,10 @@ export default defineSchema({
       v.union(
         v.literal("pending"),
         v.literal("completed"),
-        v.literal("cancelled"),
-      ),
+        v.literal("cancelled")
+      )
     ),
+    imageId: v.optional(v.id("_storage")),
   })
     .index("by_owner", ["owner"])
     .index("by_grantor_status", ["grantor", "status"])
