@@ -2,6 +2,7 @@
 
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { fetchMutation, fetchQuery } from "convex/nextjs";
+import { toast } from "sonner";
 import type { CreateWishAction, EditWishAction } from "@/types/dto/wish";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -92,4 +93,21 @@ export const editWish = async (data: EditWishAction) => {
       token: await convexAuthNextjsToken(),
     }
   );
+};
+
+export const deleteWish = async (wishId: Id<"wishes">) => {
+  try {
+    await fetchMutation(
+      api.wishes.deleteWish,
+      {
+        wishId,
+      },
+      {
+        token: await convexAuthNextjsToken(),
+      }
+    );
+  } catch (error) {
+    console.error("Error deleting wish:", error);
+    toast.error("Failed to delete wish. Please try again.");
+  }
 };

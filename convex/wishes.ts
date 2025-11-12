@@ -356,6 +356,35 @@ export const editWish = mutation({
   },
 });
 
+export const deleteWish = mutation({
+  args: {
+    wishId: v.id("wishes"),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserData(ctx);
+
+    const wish = await ctx.db.get(args.wishId);
+    if (!wish) {
+      throw new Error("Wish not found");
+    }
+
+    // Check if the user is the owner of the wish
+    if (wish.owner.toString() !== user._id) {
+      throw new Error("You are not the owner of this wish");
+    }
+
+    // Delete associated image from storage if exists
+    if (wish.imageId) {
+      await ctx.storage.delete(wish.imageId);
+    }
+
+    // Delete the wish from the database
+    await ctx.db.delete(args.wishId);
+
+    return;
+  },
+});
+
 /**
  * Utils
  */
