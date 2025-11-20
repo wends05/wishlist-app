@@ -205,7 +205,7 @@ export const createWish = mutation({
     name: v.string(),
     description: v.string(),
     imageId: v.optional(v.id("_storage")),
-    category: v.id("categories"),
+    category: v.string(),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserData(ctx);
@@ -218,10 +218,19 @@ export const createWish = mutation({
       }
     }
 
+    const category = await ctx.db
+      .query("categories")
+      .withIndex("by_name", (q) => q.eq("name", args.category))
+      .first();
+
+    if (!category) {
+      throw new Error("Category not found");
+    }
+
     const wish = await ctx.db.insert("wishes", {
       name: args.name,
       description: args.description,
-      category: args.category,
+      category: category._id,
       imageUrl: receivedStorageUrl ?? "",
       imageId: args.imageId,
       owner: user._id,
@@ -309,7 +318,7 @@ export const editWish = mutation({
       description: v.string(),
       imageId: v.optional(v.id("_storage")),
       removeImage: v.boolean(),
-      category: v.id("categories"),
+      category: v.string(),
     }),
   },
   handler: async (ctx, args) => {
@@ -321,11 +330,11 @@ export const editWish = mutation({
     }
 
     // Check if the user is the owner of the wish
-    if (originalWish.owner.toString() !== user._id) {
+    if (originalWish.owner !== user._id) {
       throw new Error("You are not the owner of this wish");
     }
 
-    //
+    
     let receivedStorageUrl: string | null = null;
     if (args.wish.removeImage) {
       if (originalWish.imageId) {
@@ -342,13 +351,22 @@ export const editWish = mutation({
         await ctx.storage.delete(originalWish.imageId);
       }
     }
+    // Get category ID
+    const category = await ctx.db
+      .query("categories")
+      .withIndex("by_name", (q) => q.eq("name", args.wish.category))
+      .first();
+
+    if (!category) {
+      throw new Error("Category not found");
+    }
 
     // Update the wish with the new values
     const updatedWish = await ctx.db.patch(args.wish._id, {
       name: args.wish.name,
       description: args.wish.description,
       imageUrl: receivedStorageUrl ?? "",
-      category: args.wish.category,
+      category: category._id,
       imageId: args.wish.imageId,
     });
 

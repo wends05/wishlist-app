@@ -119,7 +119,7 @@ export default function WishEditForm({
                       </span>
                     )}
                   </div>
-                </div>{" "}
+                </div>
                 <f.Field name="removeImage">
                   {(field) =>
                     wishInformation.imageUrl !== localImageURL ||

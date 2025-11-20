@@ -1,5 +1,4 @@
 import type { FormEvent } from "react";
-import { Separator } from "@/components/ui/separator";
 import { useLoginForm } from "@/hooks/useLoginForm";
 
 export default function LoginForm() {
@@ -22,7 +21,7 @@ export default function LoginForm() {
           )}
         </f.AppField>
         <f.AppForm>
-          <f.FormSubmit label="Log In" isSubmittingLabel="Logging Ing" />
+          <f.FormSubmit label="Log In" isSubmittingLabel="Logging In" />
         </f.AppForm>
       </div>
     </form>

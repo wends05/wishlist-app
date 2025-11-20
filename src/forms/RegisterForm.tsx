@@ -16,13 +16,13 @@ export default function RegisterForm() {
       <input name="flow" value="signUp" type="hidden" readOnly />
       <f.AppField name="name">
         {(form) => <form.FormInput label="Name" />}
-      </f.AppField>{" "}
+      </f.AppField>
       <f.AppField name="email">
         {(form) => <form.FormInput label="Email" />}
-      </f.AppField>{" "}
+      </f.AppField>
       <f.AppField name="password">
         {(form) => <form.FormInput label="Password" type="password" />}
-      </f.AppField>{" "}
+      </f.AppField>
       <f.AppField name="confirmPassword">
         {(form) => <form.FormInput label="Confirm Password" type="password" />}
       </f.AppField>
