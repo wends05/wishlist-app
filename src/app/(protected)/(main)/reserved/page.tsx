@@ -1,16 +1,23 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
+import { cacheLife } from "next/cache";
 import ReservedWishesPage from "@/app/(protected)/(main)/reserved/ReservedWishesPage";
 import { api } from "../../../../../convex/_generated/api";
 
-export default async function Reserved() {
+async function getReservedWishes(token?: string) {
+  "use cache";
+  cacheLife("minutes");
   const preloadedReservedWishes = await preloadQuery(
     api.wishes.getReservedWishes,
     {},
-    {
-      token: await convexAuthNextjsToken(),
-    },
+    { token }
   );
+  return preloadedReservedWishes;
+}
+
+export default async function Reserved() {
+  const token = await convexAuthNextjsToken();
+  const preloadedReservedWishes = await getReservedWishes(token);
   return (
     <ReservedWishesPage preloadedReservedWishes={preloadedReservedWishes} />
   );
