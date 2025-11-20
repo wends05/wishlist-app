@@ -330,7 +330,7 @@ export const editWish = mutation({
     }
 
     // Check if the user is the owner of the wish
-    if (originalWish.owner !== user._id) {
+    if (originalWish.owner.toString() !== user._id.toString()) {
       throw new Error("You are not the owner of this wish");
     }
 
