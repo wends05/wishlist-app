@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,13 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Doc } from "../../../../../../convex/_generated/dataModel";
+import type { Doc } from "../../../../../convex/_generated/dataModel";
 
 interface EditProfileModalProps {
   profileDetails: Doc<"users">;
 }
 
-export default function EditProfileModal({
+export default function AdditionalInfoModal({
   profileDetails,
 }: EditProfileModalProps) {
   return (
@@ -32,9 +31,6 @@ export default function EditProfileModal({
           <DialogClose asChild>
             <Button variant={"secondary"}>Close</Button>
           </DialogClose>
-          <Link href={"/profile/edit"}>
-            <Button>Edit</Button>
-          </Link>
         </DialogFooter>
         <DialogClose />
       </DialogContent>

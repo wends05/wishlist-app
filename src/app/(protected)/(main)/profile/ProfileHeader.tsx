@@ -1,10 +1,15 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
-import EditProfileModal from "@/app/(protected)/(main)/profile/edit/EditProfileDialog";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
+import AdditionalInfoModal from "@/app/(protected)/(main)/profile/AdditionalInfoModal";
+import { Button } from "@/components/ui/button";
 import type { api } from "../../../../../convex/_generated/api";
 
 interface ProfileHeaderProps {
-  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserDataHandler>;
+  preloadedProfileDetails: Preloaded<
+    typeof api.users.getCurrentUserDataHandler
+  >;
 }
 
 export default function ProfileHeader({
@@ -21,7 +26,14 @@ export default function ProfileHeader({
           <h2>{profileDetails.name}</h2>
           <h3>{profileDetails.email}</h3>
         </div>
-        <EditProfileModal profileDetails={profileDetails} />
+        <div className="flex gap-2">
+          <AdditionalInfoModal profileDetails={profileDetails} />
+          <Link href={"/profile/edit"}>
+            <Button variant={"ghost"}>
+              <Pencil />
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
