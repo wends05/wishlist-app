@@ -1,27 +1,40 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
+import { cacheLife } from "next/cache";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "../../../../../convex/_generated/api";
 import GrantedWishes from "./GrantedWishes";
 import WishesWithoutStatus from "./WishesWithoutStatus";
 
-export default async function MyWishes() {
+async function getGrantedWishes(token: string | undefined) {
+  "use cache";
+  cacheLife("minutes");
+
   const preloadedGrantedWishes = await preloadQuery(
     api.wishes.getGrantedWishes,
     {},
-    {
-      token: await convexAuthNextjsToken(),
-    }
+    { token }
   );
+  return preloadedGrantedWishes;
+}
+async function getWishesWithoutStatus(token: string | undefined) {
+  "use cache";
+  cacheLife("minutes");
 
   const preloadedWishesWithoutStatus = await preloadQuery(
     api.wishes.getWishesWithoutStatus,
     {},
-    {
-      token: await convexAuthNextjsToken(),
-    }
+    { token }
   );
+  return preloadedWishesWithoutStatus;
+}
+
+export default async function MyWishes() {
+  const token = await convexAuthNextjsToken();
+  const preloadedGrantedWishes = await getGrantedWishes(token);
+
+  const preloadedWishesWithoutStatus = await getWishesWithoutStatus(token);
 
   return (
     <Tabs defaultValue="pending" className="h-full">
