@@ -1,32 +1,14 @@
-import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
-import { preloadQuery } from "convex/nextjs";
-import HomeSidebar from "@/app/(protected)/(main)/HomeSidebar";
-import HomeHeader from "@/app/(protected)/(main)/home/HomeHeader";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { api } from "../../../../convex/_generated/api";
+import { Suspense } from "react";
+import HomeLayout from "./HomeLayout";
 
 interface HomeLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function HomeLayout({ children }: HomeLayoutProps) {
-  const preloadedProfileDetails = await preloadQuery(
-    api.users.getCurrentUserDataHandler,
-    {},
-    {
-      token: await convexAuthNextjsToken(),
-    },
-  );
-
+export default async function Layout({ children }: HomeLayoutProps) {
   return (
-    <div>
-      <SidebarProvider>
-        <HomeSidebar preloadedProfileDetails={preloadedProfileDetails} />
-        <SidebarInset className="p-2">
-          <HomeHeader />
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
-    </div>
+    <Suspense fallback={<div className="h-screen w-full bg-background" />}>
+      <HomeLayout>{children}</HomeLayout>
+    </Suspense>
   );
 }

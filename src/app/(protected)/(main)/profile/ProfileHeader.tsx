@@ -26,6 +26,7 @@ export default function ProfileHeader({
           <h2>{profileDetails.name}</h2>
           <h3>{profileDetails.email}</h3>
         </div>
+
         <div className="flex gap-2">
           <AdditionalInfoModal profileDetails={profileDetails} />
           <Link href={"/profile/edit"}>
