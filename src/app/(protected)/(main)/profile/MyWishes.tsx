@@ -5,7 +5,7 @@ import { api } from "../../../../../convex/_generated/api";
 import GrantedWishes from "./GrantedWishes";
 import WishesWithoutStatus from "./WishesWithoutStatus";
 
-export default async function MyWishes({ token }: { token?: string }) {
+export default async function MyWishes({ token }: { token?: string }) { 
   const preloadedGrantedWishes = await preloadQuery(
     api.wishes.getGrantedWishes,
     {},

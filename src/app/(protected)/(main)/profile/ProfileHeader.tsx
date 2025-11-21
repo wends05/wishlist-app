@@ -1,13 +1,21 @@
-import { fetchQuery } from "convex/nextjs";
-import EditProfileDialog from "@/app/(protected)/(main)/profile/edit/EditProfileDialog";
-import { api } from "../../../../../convex/_generated/api";
+"use client";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
+import AdditionalInfoModal from "@/app/(protected)/(main)/profile/AdditionalInfoModal";
+import { Button } from "@/components/ui/button";
+import type { api } from "../../../../../convex/_generated/api";
 
-export default async function ProfileHeader({ token }: { token?: string }) {
-  const profileDetails = await fetchQuery(
-    api.users.getCurrentUserDataHandler,
-    {},
-    { token }
-  );
+interface ProfileHeaderProps {
+  preloadedProfileDetails: Preloaded<
+    typeof api.users.getCurrentUserDataHandler
+  >;
+}
+
+export default function ProfileHeader({
+  preloadedProfileDetails,
+}: ProfileHeaderProps) {
+  const profileDetails = usePreloadedQuery(preloadedProfileDetails);
   return (
     <div className="flex h-72 items-center py-20">
       <div className="flex h-full items-center justify-center">
@@ -18,7 +26,15 @@ export default async function ProfileHeader({ token }: { token?: string }) {
           <h2>{profileDetails.name}</h2>
           <h3>{profileDetails.email}</h3>
         </div>
-        <EditProfileDialog profileDetails={profileDetails} />
+
+        <div className="flex gap-2">
+          <AdditionalInfoModal profileDetails={profileDetails} />
+          <Link href={"/profile/edit"}>
+            <Button variant={"ghost"}>
+              <Pencil />
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
