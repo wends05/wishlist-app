@@ -1,12 +1,8 @@
-import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import { cacheLife } from "next/cache";
 import { api } from "../../../../../convex/_generated/api";
 import WishList from "./WishList";
 
 async function getPreloadedCategories(token: string | undefined) {
-  "use cache";
-  cacheLife("minutes");
   const preloadedCategories = await preloadQuery(
     api.categories.getAllFilterCategories,
     {},
@@ -14,9 +10,11 @@ async function getPreloadedCategories(token: string | undefined) {
   );
   return preloadedCategories;
 }
+interface GetWishListProps {
+  token?: string;
+}
 
-export default async function GetWishList() {
-  const token = await convexAuthNextjsToken();
+export default async function GetWishList({ token }: GetWishListProps) {
   const preloadedCategories = await getPreloadedCategories(token);
 
   return <WishList preloadedCategories={preloadedCategories} />;

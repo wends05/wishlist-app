@@ -11,13 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import type { Doc } from "../../../../../../convex/_generated/dataModel";
 
-interface EditProfileModalProps {
+interface EditProfileDialogProps {
   profileDetails: Doc<"users">;
 }
 
-export default function EditProfileModal({
+export default function EditProfileDialog({
   profileDetails,
-}: EditProfileModalProps) {
+}: EditProfileDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>

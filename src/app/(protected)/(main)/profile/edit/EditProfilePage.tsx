@@ -5,7 +5,9 @@ import EditProfileForm from "@/forms/EditProfileForm";
 import type { api } from "../../../../../../convex/_generated/api";
 
 interface EditProfilePageProps {
-  preloadedProfileDetails: Preloaded<typeof api.users.getCurrentUserDataHandler>;
+  preloadedProfileDetails: Preloaded<
+    typeof api.users.getCurrentUserDataHandler
+  >;
 }
 export default function EditProfilePage({
   preloadedProfileDetails,
