@@ -40,4 +40,19 @@ export default defineSchema({
     icon: v.string(),
     updatedAt: v.number(),
   }).index("by_name", ["name"]),
+  chats: defineTable({
+    potentialGrantor: v.id("users"),
+    owner: v.id("users"),
+    wish: v.id("wishes"),
+    createdAt: v.number(),
+  })
+    .index("by_wish_and_users", ["wish", "potentialGrantor"])
+    .index("by_potentialGrantor", ["potentialGrantor"])
+    .index("by_owner", ["owner"]),
+  messages: defineTable({
+    chat: v.id("chats"),
+    sender: v.id("users"),
+    content: v.string(),
+    createdAt: v.number(),
+  }).index("by_chat_createdAt", ["chat", "createdAt"]),
 });
