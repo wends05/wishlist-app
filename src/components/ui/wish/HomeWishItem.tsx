@@ -14,7 +14,6 @@ interface WishItemProps {
 
 export default function HomeWishItem({ wish }: WishItemProps) {
   const reserveWish = useMutation(api.wishes.reserveWish);
-
   const handleReserveWish = async () => {
     try {
       await reserveWish({ wishId: wish._id });

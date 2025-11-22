@@ -20,6 +20,10 @@ export const homeLinks: NavLink[] = [
     href: "/reserved",
     label: "Reserved",
   },
+  {
+    href: "/chats",
+    label: "Chats",
+  },
 ];
 
 /**

@@ -24,7 +24,7 @@ export default function ConfirmCancel({ wishId }: ConfirmCancelProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant={"destructive"} className="w-full">
+        <Button variant={"destructive"}>
           <Ban />
         </Button>
       </AlertDialogTrigger>

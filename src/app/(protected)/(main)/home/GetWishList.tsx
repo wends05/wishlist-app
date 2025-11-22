@@ -10,6 +10,7 @@ async function getPreloadedCategories(token: string | undefined) {
   );
   return preloadedCategories;
 }
+
 interface GetWishListProps {
   token?: string;
 }

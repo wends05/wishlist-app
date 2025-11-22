@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import HomeLayout from "./HomeLayout";
 
 interface HomeLayoutProps {
@@ -6,9 +5,5 @@ interface HomeLayoutProps {
 }
 
 export default async function Layout({ children }: HomeLayoutProps) {
-  return (
-    <Suspense fallback={<div className="h-screen w-full bg-background" />}>
-      <HomeLayout>{children}</HomeLayout>
-    </Suspense>
-  );
+  return <HomeLayout>{children}</HomeLayout>;
 }
