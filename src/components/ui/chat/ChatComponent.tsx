@@ -45,7 +45,7 @@ function ChatActions() {
 
   return (
     <CardFooter className="flex flex-row-reverse pt-4">
-      <Link href={`chats/${chat._id}`}>
+      <Link href={`/chats/${chat._id}`}>
         <Button>
           <ChevronRight />
         </Button>

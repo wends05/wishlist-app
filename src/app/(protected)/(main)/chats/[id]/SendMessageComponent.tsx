@@ -1,7 +1,6 @@
 "use client";
 import { toast } from "sonner";
 import { sendMessage } from "@/actions/message";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppForm } from "@/hooks/FormHooks";
 import type { Id } from "../../../../../../convex/_generated/dataModel";

@@ -1,6 +1,6 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
-import OwningWishChatCard from "@/components/ui/card/OwningWishChatCard";
+import OwningWishChatCard from "@/components/ui/chat/OwningWishChatCard";
 import type { api } from "../../../../../convex/_generated/api";
 
 interface OwnedWishChatsListProps {
