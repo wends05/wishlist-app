@@ -64,9 +64,16 @@ export default function MessageList({
         <div className="h-20" />
         {[...messages].reverse().map((message) => (
           <Message
+            timestamp={message.timestamp}
             key={message._id}
             content={message.content}
-            isOwner={message.sender.id === user?._id}
+            type={
+              message.isSystemMessage
+                ? "system"
+                : message.sender.id === user?._id
+                  ? "user"
+                  : "other"
+            }
           />
         ))}
         <div className="h-20" />

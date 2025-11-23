@@ -53,7 +53,10 @@ export default function ChatPage({ preloadedChat }: ChatPageProps) {
 
   return (
     <>
-      <ChatHeader otherPersonName={otherPersonName} wishId={chat.wish} />
+      <ChatHeader
+        otherPersonName={otherPersonName}
+        wish={chat.wish}
+      />
       <div className="flex h-full flex-col items-center space-y-3">
         <div className="flex min-h-0 w-full max-w-3xl flex-1 flex-col">
           <MessageList

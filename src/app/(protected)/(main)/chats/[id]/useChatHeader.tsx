@@ -5,14 +5,15 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useHomeHeader } from "@/providers/HomeHeaderProvider";
 import type { Id } from "../../../../../../convex/_generated/dataModel";
-import WishDetailsButton from "./WishDetailsButton";
+import ChatActions from "./ChatActions";
 
 interface UseChatHeaderProps {
   title: string;
   wishId: Id<"wishes">;
+  isDelivering: boolean
 }
 
-export default function useChatHeader({ title, wishId }: UseChatHeaderProps) {
+export default function useChatHeader({ title, wishId, isDelivering }: UseChatHeaderProps) {
   const { setContent } = useHomeHeader();
 
   useEffect(() => {
@@ -22,12 +23,12 @@ export default function useChatHeader({ title, wishId }: UseChatHeaderProps) {
           <ChevronLeft />
         </Link>
         <h3>{title}</h3>
-        <WishDetailsButton wishId={wishId} />
+        <ChatActions wishId={wishId} isDelivering={isDelivering} />
       </>
     );
 
     return () => {
       setContent(null);
     };
-  }, [title, setContent, wishId]);
+  }, [title, setContent, wishId, isDelivering]);
 }

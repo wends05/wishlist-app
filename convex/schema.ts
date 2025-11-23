@@ -25,6 +25,7 @@ export default defineSchema({
     status: v.optional(
       v.union(
         v.literal("pending"),
+        v.literal("delivering"),
         v.literal("completed"),
         v.literal("cancelled")
       )
@@ -54,6 +55,7 @@ export default defineSchema({
     chat: v.id("chats"),
     sender: v.id("users"),
     content: v.string(),
+    isSystemMessage: v.boolean(),
     createdAt: v.number(),
   }).index("by_chat_createdAt", ["chat", "createdAt"]),
   notifications: defineTable({

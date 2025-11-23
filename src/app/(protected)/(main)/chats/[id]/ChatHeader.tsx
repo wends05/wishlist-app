@@ -1,14 +1,17 @@
-
-import { Id } from "../../../../../../convex/_generated/dataModel";
+import type { ChatDetails } from "@/types/Chat";
 import useChatHeader from "./useChatHeader";
 
 interface ChatHeaderProps {
   otherPersonName: string;
-  wishId: Id<"wishes">;
+  wish: ChatDetails["wish"];
 }
 
-export default function ChatHeader({ otherPersonName, wishId }: ChatHeaderProps) {
-  useChatHeader({ title: otherPersonName, wishId });
+export default function ChatHeader({ otherPersonName, wish }: ChatHeaderProps) {
+  useChatHeader({
+    title: otherPersonName,
+    wishId: wish._id,
+    isDelivering: wish.isDelivering,
+  });
 
   return null;
 }
