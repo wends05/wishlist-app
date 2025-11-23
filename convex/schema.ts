@@ -48,7 +48,8 @@ export default defineSchema({
   })
     .index("by_wish_and_users", ["wish", "potentialGrantor"])
     .index("by_potentialGrantor", ["potentialGrantor"])
-    .index("by_owner", ["owner"]),
+    .index("by_owner", ["owner"])
+    .index("by_wish", ["wish"]),
   messages: defineTable({
     chat: v.id("chats"),
     sender: v.id("users"),

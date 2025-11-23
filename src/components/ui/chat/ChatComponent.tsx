@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import ConfirmCancel from "@/app/(protected)/(main)/reserved/ConfirmCancel";
 import { cn } from "@/lib/utils";
 import type { Chat } from "@/types/Chat";
 import { Button } from "../button";
@@ -40,11 +41,16 @@ function ChatComponentRoot({
   );
 }
 
-function ChatActions() {
+interface ChatActionsProps {
+  children?: React.ReactNode;
+}
+
+function ChatActions({ children }: ChatActionsProps) {
   const { chat } = useChatItem();
 
   return (
-    <CardFooter className="flex flex-row-reverse pt-4">
+    <CardFooter className="flex justify-end gap-2 pt-4">
+      {children}
       <Link href={`/chats/${chat._id}`}>
         <Button>
           <ChevronRight />

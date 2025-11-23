@@ -29,10 +29,11 @@ export default function ConfirmCancel({ wishId }: ConfirmCancelProps) {
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
-        <AlertDialogTitle>Cancel Reservation</AlertDialogTitle>
+        <AlertDialogTitle>Cancel Granting this wish</AlertDialogTitle>
         <AlertDialogDescription>
           Are you sure you want to cancel your reservation for this wish? This
-          action cannot be undone.
+          action cannot be undone. This will also remove the conversation with
+          the other person about this wish.
         </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogAction

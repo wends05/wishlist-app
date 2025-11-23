@@ -1,3 +1,4 @@
+import ConfirmCancel from "@/app/(protected)/(main)/reserved/ConfirmCancel";
 import type { GrantingWishChatCard as GrantingWishChatCardProps } from "@/types/Chat";
 import { CardDescription, CardHeader, CardTitle } from "../card";
 import { ChatComponent } from "./ChatComponent";
@@ -13,7 +14,13 @@ export default function GrantingWishChatCard({
         <CardTitle>{chat.wish.name}</CardTitle>
         <CardDescription>by: {chat.owner}</CardDescription>
       </CardHeader>
-      <ChatComponent.Actions />
+      <ChatComponent.Actions>
+        {typeof chat.wish === "string" ? (
+          <ConfirmCancel wishId={chat.wish} />
+        ) : (
+          <ConfirmCancel wishId={chat.wish._id} />
+        )}
+      </ChatComponent.Actions>
     </ChatComponent>
   );
 }
