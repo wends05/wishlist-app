@@ -10,6 +10,7 @@ import {
   type QueryCtx,
   query,
 } from "./_generated/server";
+import { createNotificationHandler } from "./notifications";
 import { getCurrentUserData } from "./users";
 
 /**
@@ -310,9 +311,9 @@ export const reserveWish = mutation({
     wishId: v.id("wishes"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
+    const user = await getCurrentUserData(ctx);
 
-    if (!userId) {
+    if (!user) {
       throw new ConvexError("Unauthorized");
     }
 
@@ -321,16 +322,23 @@ export const reserveWish = mutation({
     if (!wish) {
       throw new ConvexError("Wish not found");
     }
-    if (wish.owner.toString() === userId) {
+    if (wish.owner.toString() === user._id.toString()) {
       throw new ConvexError("You cannot reserve your own wish");
     }
     if (wish.grantor) {
       throw new ConvexError(`Wish for ${wish.name} is already reserved`);
     }
     const updatedWish = await ctx.db.patch(args.wishId, {
-      grantor: userId,
+      grantor: user._id,
       status: "pending",
       updatedAt: Date.now(),
+    });
+
+    // create notification
+    await createNotificationHandler(ctx, {
+      recipient: wish.owner,
+      content: `Your wish "${wish.name}" has been reserved by ${user.name ?? user.email}!`,
+      link: `/wish/${wish._id}`,
     });
     return updatedWish;
   },
