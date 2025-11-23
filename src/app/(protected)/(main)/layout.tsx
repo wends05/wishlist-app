@@ -1,3 +1,4 @@
+import { HomeHeaderProvider } from "@/providers/HomeHeaderProvider";
 import HomeLayout from "./HomeLayout";
 
 interface HomeLayoutProps {
@@ -5,5 +6,9 @@ interface HomeLayoutProps {
 }
 
 export default async function Layout({ children }: HomeLayoutProps) {
-  return <HomeLayout>{children}</HomeLayout>;
+  return (
+    <HomeHeaderProvider>
+      <HomeLayout>{children}</HomeLayout>
+    </HomeHeaderProvider>
+  );
 }

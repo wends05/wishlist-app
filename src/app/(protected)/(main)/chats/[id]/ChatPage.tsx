@@ -40,9 +40,16 @@ export default function ChatPage({ preloadedChat }: ChatPageProps) {
       </div>
     );
   }
-
   const otherPersonName =
     user._id === chat.owner ? chat.potentialGrantorName : chat.ownerName;
+
+  if (!chat.ownerName || !chat.potentialGrantorName || !otherPersonName) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <p>Chat not found.</p>
+      </div>
+    );
+  }
 
   return (
     <>

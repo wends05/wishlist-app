@@ -33,5 +33,5 @@ export const homeLinks: NavLink[] = [
  * @returns The title of the route
  */
 export function getRouteTitle(route: string, links: NavLink[]) {
-  return links.find((link) => link.href === route)?.label || "";
+  return links.find((link) => link.href === route)?.label;
 }
