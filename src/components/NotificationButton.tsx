@@ -3,7 +3,7 @@ import { fetchQuery } from "convex/nextjs";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../convex/_generated/api";
 
 export default async function NotificationButton() {
   const notifications = await fetchQuery(
