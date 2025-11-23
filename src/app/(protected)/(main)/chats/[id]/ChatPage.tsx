@@ -6,7 +6,6 @@ import {
   usePreloadedQuery,
   useQuery,
 } from "convex/react";
-import { useEffect, useEffectEvent } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "../../../../../../convex/_generated/api";
 import ChatHeader from "./ChatHeader";
