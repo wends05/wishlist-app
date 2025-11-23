@@ -3,10 +3,10 @@ import { ConvexError } from "convex/values";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { Wish } from "@/types/Wish";
-import { api } from "../../../../convex/_generated/api";
-import ConfirmCancel from "../../../app/(protected)/(main)/reserved/ConfirmCancel";
-import { Button } from "../button";
-import { WishComponent } from "./WishComponent";
+import { api } from "../../../../../convex/_generated/api";
+import { Button } from "../../../../components/ui/button";
+import { WishComponent } from "../../../../components/wish/WishComponent";
+import ConfirmCancel from "./ConfirmCancel";
 
 type ReservedWishProps = {
   wish: Wish;
@@ -16,8 +16,9 @@ export default function ReservedWish({ wish }: ReservedWishProps) {
   const router = useRouter();
   const handleCreateChat = async () => {
     try {
-      const chatSessionId = await createChat({ wishId: wish._id });
+      const { created, chatSessionId } = await createChat({ wishId: wish._id });
       router.push(`/chats/${chatSessionId}`);
+      if (created) toast.success("Chat session created!");
     } catch (error) {
       if (error instanceof ConvexError) {
         toast.error(error.data);

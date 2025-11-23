@@ -1,5 +1,5 @@
 import type { Wish } from "@/types/Wish";
-import { WishComponent } from "./WishComponent";
+import { WishComponent } from "../../../../components/wish/WishComponent";
 
 interface GrantedWishProps {
   wish: Wish;

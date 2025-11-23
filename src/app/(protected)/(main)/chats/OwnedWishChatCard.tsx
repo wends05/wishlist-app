@@ -1,11 +1,11 @@
-import type { OwningWishChatCard as OwningWishChatCardProps } from "@/types/Chat";
-import { CardDescription, CardHeader, CardTitle } from "../card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { OwnedWishChatCard as OwnedWishChatCardProps } from "@/types/Chat";
 import { ChatComponent } from "./ChatComponent";
 
-export default function OwningWishChatCard({
+export default function OwnedWishChatCard({
   chat,
 }: {
-  chat: OwningWishChatCardProps;
+  chat: OwnedWishChatCardProps;
 }) {
   return (
     <ChatComponent chat={chat}>

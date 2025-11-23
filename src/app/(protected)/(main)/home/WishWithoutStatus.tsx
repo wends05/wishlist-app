@@ -2,8 +2,8 @@ import { Pencil } from "lucide-react";
 import Link from "next/link";
 import DeleteWishDialog from "@/app/(protected)/(main)/profile/DeleteWishDialog";
 import type { Wish } from "@/types/Wish";
-import { Button } from "../button";
-import { WishComponent } from "./WishComponent";
+import { Button } from "../../../../components/ui/button";
+import { WishComponent } from "../../../../components/wish/WishComponent";
 
 interface WishWithoutStatusProps {
   wish: Wish;

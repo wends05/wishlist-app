@@ -8,8 +8,8 @@ export type GrantingWishChatCard = FunctionReturnType<
   typeof api.chats.getGrantingWishChats
 >[number];
 
-export type OwningWishChatCard = FunctionReturnType<
-  typeof api.chats.getOwningWishChats
+export type OwnedWishChatCard = FunctionReturnType<
+  typeof api.chats.getOwnedWishChats
 >[number];
 
-export type Chat = BaseChat | GrantingWishChatCard | OwningWishChatCard;
+export type Chat = BaseChat | GrantingWishChatCard | OwnedWishChatCard;

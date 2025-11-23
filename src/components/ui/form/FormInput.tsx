@@ -4,25 +4,20 @@ import { Field, FieldError, FieldLabel } from "../field";
 import { Input } from "../input";
 
 interface FormInputProps {
-  name?: string;
-  label: string;
+  label?: string;
   type?: HTMLInputTypeAttribute;
 }
 
-export default function FormInput({
-  label,
-  type = "text",
-  name,
-}: FormInputProps) {
+export default function FormInput({ label, type = "text" }: FormInputProps) {
   const field = useFieldContext<number | string>();
   const id = useId();
 
   return (
     <Field className="space-y-2">
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      {label && <FieldLabel htmlFor={id}>{label}</FieldLabel>}
       <div className="space-y-1">
         <Input
-          name={name ?? label.toLowerCase()}
+          name={field.name}
           id={id}
           value={field.state.value}
           onChange={(e) => {
