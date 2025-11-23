@@ -3,10 +3,10 @@ import type { FunctionReturnType } from "convex/server";
 import { ConvexError } from "convex/values";
 import { Blocks } from "lucide-react";
 import { toast } from "sonner";
-import { api } from "../../../../convex/_generated/api";
-import { Button } from "../button";
-import { CardTitle } from "../card";
-import { WishComponent } from "./WishComponent";
+import { api } from "../../../../../convex/_generated/api";
+import { Button } from "../../../../components/ui/button";
+import { CardTitle } from "../../../../components/ui/card";
+import { WishComponent } from "../../../../components/wish/WishComponent";
 
 interface WishItemProps {
   wish: FunctionReturnType<typeof api.wishes.getHomePageWishes>["page"][number];
@@ -17,6 +17,7 @@ export default function HomeWishItem({ wish }: WishItemProps) {
   const handleReserveWish = async () => {
     try {
       await reserveWish({ wishId: wish._id });
+      toast.success("Wish reserved successfully!");
     } catch (error) {
       if (error instanceof ConvexError) {
         toast.error(error.data);

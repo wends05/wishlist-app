@@ -1,6 +1,7 @@
 "use client";
 import { useMutation } from "convex/react";
 import { Ban } from "lucide-react";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,8 +20,17 @@ interface ConfirmCancelProps {
   wishId: Id<"wishes">;
 }
 export default function ConfirmCancel({ wishId }: ConfirmCancelProps) {
-  const handleCancel = useMutation(api.wishes.cancelReservedWish);
+  const cancelReservedWish = useMutation(api.wishes.cancelReservedWish);
 
+  const handleCancel = async () => {
+    try {
+      await cancelReservedWish({ wishId });
+      toast.success("Reservation cancelled successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to cancel reservation. Please try again.");
+    }
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -36,15 +46,7 @@ export default function ConfirmCancel({ wishId }: ConfirmCancelProps) {
           the other person about this wish.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogAction
-            onClick={() =>
-              handleCancel({
-                wishId,
-              })
-            }
-          >
-            Continue
-          </AlertDialogAction>
+          <AlertDialogAction onClick={handleCancel}>Continue</AlertDialogAction>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

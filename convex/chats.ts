@@ -21,7 +21,10 @@ export const getChatSessionId = mutation({
       .unique();
 
     if (existingChat) {
-      return existingChat._id;
+      return {
+        chatSessionId: existingChat._id,
+        created: false,
+      };
     }
 
     // create a new chat session
@@ -32,7 +35,7 @@ export const getChatSessionId = mutation({
       createdAt: Date.now(),
     });
 
-    return newChatId;
+    return { chatSessionId: newChatId, created: true };
   },
 });
 
@@ -73,7 +76,7 @@ export const getGrantingWishChats = query({
   },
 });
 
-export const getOwningWishChats = query({
+export const getOwnedWishChats = query({
   args: {},
   handler: async (ctx) => {
     const user = await getCurrentUserData(ctx);

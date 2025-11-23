@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "../empty";
+} from "../ui/empty";
 
 interface EmptyWishListProps {
   title?: string;
