@@ -56,4 +56,10 @@ export default defineSchema({
     content: v.string(),
     createdAt: v.number(),
   }).index("by_chat_createdAt", ["chat", "createdAt"]),
+  notifications: defineTable({
+    recipient: v.id("users"),
+    content: v.string(),
+    link: v.string(),
+    isRead: v.boolean(),
+  }).index("by_recipient_isRead", ["recipient", "isRead"]),
 });

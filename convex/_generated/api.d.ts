@@ -14,6 +14,7 @@ import type * as categories from "../categories.js";
 import type * as chats from "../chats.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
+import type * as notifications from "../notifications.js";
 import type * as users from "../users.js";
 import type * as wishes from "../wishes.js";
 
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   chats: typeof chats;
   http: typeof http;
   messages: typeof messages;
+  notifications: typeof notifications;
   users: typeof users;
   wishes: typeof wishes;
 }>;

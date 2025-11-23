@@ -12,7 +12,8 @@ const protectedRoute = createRouteMatcher([
   "/feature(.*)",
   "/profile(.*)",
   "/reserved(.*)",
-  "/chats(.*)"
+  "/chats(.*)",
+  "/notifications(.*)",
 ]);
 
 export default convexAuthNextjsMiddleware(
@@ -26,7 +27,7 @@ export default convexAuthNextjsMiddleware(
   },
   {
     cookieConfig: { maxAge: 60 * 60 * 24 * 30 },
-  },
+  }
 );
 
 export const config = {
