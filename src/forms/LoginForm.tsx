@@ -13,11 +13,11 @@ export default function LoginForm() {
       <div className="space-y-4">
         <input hidden name="flow" value="signIn" readOnly />
         <f.AppField name="email">
-          {(field) => <field.FormInput label="Email" name="email" />}
+          {(field) => <field.FormInput label="Email"  />}
         </f.AppField>
         <f.AppField name="password">
           {(field) => (
-            <field.FormInput label="Password" type="password" name="password" />
+            <field.FormInput label="Password" type="password" />
           )}
         </f.AppField>
         <f.AppForm>

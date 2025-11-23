@@ -1,26 +1,27 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
-import OwningWishChatCard from "@/components/ui/chat/OwningWishChatCard";
 import type { api } from "../../../../../convex/_generated/api";
+import EmptyChatsList from "./EmptyChatsList";
+import OwnedWishChatCard from "./OwnedWishChatCard";
 
 interface OwnedWishChatsListProps {
-  preloadedOwningWishChats: Preloaded<typeof api.chats.getOwningWishChats>;
+  preloadedOwnedWishChats: Preloaded<typeof api.chats.getOwnedWishChats>;
 }
 
 export default function OwnedWishChatsList({
-  preloadedOwningWishChats,
+  preloadedOwnedWishChats,
 }: OwnedWishChatsListProps) {
-  const ownedWishChats = usePreloadedQuery(preloadedOwningWishChats);
+  const ownedWishChats = usePreloadedQuery(preloadedOwnedWishChats);
   return (
     <div>
       <h2>Owned Wish Chats</h2>
       <p>Chat with people who wants to grant your wish</p>
       {ownedWishChats.length === 0 ? (
-        <p>No chats available.</p>
+        <EmptyChatsList description="No available chats available. Please wait for a grantor to start a conversation." />
       ) : (
         <ul className="grid grid-cols-3 gap-3">
           {ownedWishChats.map((chat) => (
-            <OwningWishChatCard key={chat._id} chat={chat} />
+            <OwnedWishChatCard key={chat._id} chat={chat} />
           ))}
         </ul>
       )}

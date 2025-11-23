@@ -1,11 +1,11 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import ConfirmCancel from "@/app/(protected)/(main)/reserved/ConfirmCancel";
 import { cn } from "@/lib/utils";
 import type { Chat } from "@/types/Chat";
-import { Button } from "../button";
-import { Card, CardFooter } from "../card";
+import { Card, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 
 interface ChatItemContextValue {
   chat: Chat;

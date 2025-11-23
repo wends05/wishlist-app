@@ -1,7 +1,7 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
-import EmptyWishList from "@/components/ui/wish/EmptyWishList";
-import WishWithoutStatus from "@/components/ui/wish/WishWithoutStatus";
+import WishWithoutStatus from "@/app/(protected)/(main)/home/WishWithoutStatus";
+import EmptyWishList from "@/components/wish/EmptyWishList";
 import type { api } from "../../../../../convex/_generated/api";
 
 interface WishesWithoutStatusProps {

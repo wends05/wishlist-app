@@ -1,6 +1,6 @@
 import ConfirmCancel from "@/app/(protected)/(main)/reserved/ConfirmCancel";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GrantingWishChatCard as GrantingWishChatCardProps } from "@/types/Chat";
-import { CardDescription, CardHeader, CardTitle } from "../card";
 import { ChatComponent } from "./ChatComponent";
 
 export default function GrantingWishChatCard({

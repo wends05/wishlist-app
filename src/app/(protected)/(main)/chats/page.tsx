@@ -13,8 +13,8 @@ export default async function page() {
     {},
     { token }
   );
-  const preloadedOwningWishChats = await preloadQuery(
-    api.chats.getOwningWishChats,
+  const preloadedOwnedWishChats = await preloadQuery(
+    api.chats.getOwnedWishChats,
     {},
     { token }
   );
@@ -36,7 +36,7 @@ export default async function page() {
         </TabsContent>
         <TabsContent value="owned">
           <OwnedWishChatsList
-            preloadedOwningWishChats={preloadedOwningWishChats}
+            preloadedOwnedWishChats={preloadedOwnedWishChats}
           />
         </TabsContent>
       </Tabs>

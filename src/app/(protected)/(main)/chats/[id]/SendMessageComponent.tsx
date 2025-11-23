@@ -34,18 +34,10 @@ export default function SendMessageComponent({
         e.stopPropagation();
         f.handleSubmit();
       }}
-      className="fixed bottom-8 flex w-full max-w-md items-end gap-2 pr-4 md:right-auto md:left-auto md:w-full lg:max-w-2xl"
+      className="fixed bottom-8 flex w-full max-w-md items-center gap-2 pr-4 md:right-auto md:left-auto md:w-full lg:max-w-2xl"
     >
       <f.AppField name="content">
-        {(field) => (
-          <Textarea
-            className="min-h-6"
-            name={field.name}
-            value={field.state.value}
-            onChange={(e) => field.handleChange(e.target.value)}
-            onBlur={field.handleBlur}
-          />
-        )}
+        {(field) => <field.FormInput />}
       </f.AppField>
 
       <f.AppForm>
