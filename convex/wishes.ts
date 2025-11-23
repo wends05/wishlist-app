@@ -269,6 +269,32 @@ export const cancelReservedWish = mutation({
       throw new Error("You are not the grantor of this wish");
     }
 
+    // check if wish is already completed
+    if (wish.status === "completed") {
+      throw new Error("Cannot cancel a completed wish");
+    }
+
+    // check if there is a chat associated with this wish that is completed
+    const chat = await ctx.db
+      .query("chats")
+      .withIndex("by_wish", (q) => q.eq("wish", args.wishId))
+      .first();
+
+    if (chat) {
+      // remove messages
+      const messages = await ctx.db
+        .query("messages")
+        .withIndex("by_chat_createdAt", (q) => q.eq("chat", chat._id))
+        .collect();
+
+      for (const message of messages) {
+        await ctx.db.delete(message._id);
+      }
+
+      // remove chat
+      await ctx.db.delete(chat._id);
+    }
+
     const updatedWish = await ctx.db.patch(args.wishId, {
       grantor: undefined,
       status: undefined,
@@ -334,7 +360,6 @@ export const editWish = mutation({
       throw new Error("You are not the owner of this wish");
     }
 
-    
     let receivedStorageUrl: string | null = null;
     if (args.wish.removeImage) {
       if (originalWish.imageId) {

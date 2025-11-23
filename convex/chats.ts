@@ -64,6 +64,7 @@ export const getGrantingWishChats = query({
           ...chat,
           owner: owner.name,
           wish: {
+            _id: wish._id,
             name: wish.name,
           },
         };
@@ -96,6 +97,7 @@ export const getOwningWishChats = query({
           ...chat,
           potentialGrantor: potentialGrantor.name,
           wish: {
+            _id: wish._id,
             name: wish.name,
           },
         };
