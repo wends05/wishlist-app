@@ -64,7 +64,8 @@ export default function ChatPage({ preloadedChat }: ChatPageProps) {
             status={status}
           />
         </div>
-        <SendMessageComponent chatId={chat._id} />
+
+        <SendMessageComponent chatId={chat._id} completed={chat.wish.status === "completed"} />
       </div>
     </>
   );

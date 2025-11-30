@@ -17,18 +17,16 @@ export const getGrantingWishChats = query({
       )
       .collect();
 
-    return await Promise.all(
+    const enriched = await Promise.all(
       chats.map(async (chat) => {
-        const owner = await ctx.db
-          .get(chat.wish)
-          .then((wish) => (wish ? ctx.db.get(wish.owner) : null));
-        if (!owner) {
-          throw new Error("Owner not found");
+        const wish = await ctx.db.get(chat.wish);
+        if (!wish || wish.status === "completed") {
+          return null;
         }
 
-        const wish = await ctx.db.get(chat.wish);
-        if (!wish) {
-          throw new Error("Wish not found");
+        const owner = await ctx.db.get(wish.owner);
+        if (!owner) {
+          throw new Error("Owner not found");
         }
 
         return {
@@ -45,6 +43,8 @@ export const getGrantingWishChats = query({
         };
       })
     );
+
+    return enriched.filter((c): c is NonNullable<typeof c> => c !== null);
   },
 });
 
@@ -58,15 +58,19 @@ export const getOwnedWishChats = query({
       .withIndex("by_owner", (q) => q.eq("owner", user._id))
       .collect();
 
-    return await Promise.all(
+    const enriched = await Promise.all(
       chats.map(async (chat) => {
         const potentialGrantor = await ctx.db.get(chat.potentialGrantor);
         if (!potentialGrantor) {
           throw new Error("Potential grantor not found");
         }
-        const wish = await ctx.db.get(chat.wish);
+        const wish = await ctx.db
+          .query("wishes")
+          .withIndex("by_status")
+          .filter((q) => q.neq(q.field("status"), "completed"))
+          .first();
         if (!wish) {
-          throw new Error("Wish not found");
+          return null;
         }
         return {
           ...chat,
@@ -83,6 +87,7 @@ export const getOwnedWishChats = query({
         };
       })
     );
+    return enriched.filter((c): c is NonNullable<typeof c> => c !== null);
   },
 });
 

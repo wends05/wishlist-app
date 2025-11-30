@@ -16,7 +16,9 @@ export default function GrantedWish({ wish }: GrantedWishProps) {
           <div>
             <h1>{name}</h1>
             <p>{description}</p>
-            <WishComponent.GrantedBy className="pt-5 text-secondary" />
+            <div className="flex items-end justify-between">
+              <WishComponent.GrantedBy className="pt-5 text-secondary" />
+            </div>
           </div>
         )}
       </WishComponent.Content>

@@ -6,9 +6,14 @@ import { Input } from "../input";
 interface FormInputProps {
   label?: string;
   type?: HTMLInputTypeAttribute;
+  disabled?: boolean;
 }
 
-export default function FormInput({ label, type = "text" }: FormInputProps) {
+export default function FormInput({
+  label,
+  type = "text",
+  disabled = false,
+}: FormInputProps) {
   const field = useFieldContext<number | string>();
   const id = useId();
 
@@ -17,6 +22,7 @@ export default function FormInput({ label, type = "text" }: FormInputProps) {
       {label && <FieldLabel htmlFor={id}>{label}</FieldLabel>}
       <div className="space-y-1">
         <Input
+          disabled={disabled}
           name={field.name}
           id={id}
           value={field.state.value}

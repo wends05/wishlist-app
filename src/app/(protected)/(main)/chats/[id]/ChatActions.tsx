@@ -33,6 +33,14 @@ export default function ChatActions({
       console.error(error);
     }
   };
+  const setWishDelivered = async () => {
+    try {
+      await setWishStatus({ wishId, status: "completed" });
+    } catch (error) {
+      toast.error("Failed to set wish to delivering");
+      console.error(error);
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -47,6 +55,11 @@ export default function ChatActions({
         {!isDelivering && !isOwner && (
           <DropdownMenuItem onClick={setWishToDelivering}>
             Set To Delivering
+          </DropdownMenuItem>
+        )}
+        {isDelivering && (
+          <DropdownMenuItem asChild>
+            <Button onClick={setWishDelivered} variant={"ghost"}>Confirm Delivery</Button>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

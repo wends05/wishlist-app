@@ -182,7 +182,7 @@ export const getReservedWishes = query({
     const wishes = await ctx.db
       .query("wishes")
       .withIndex("by_grantor_status", (q) =>
-        q.eq("grantor", userId).eq("status", "delivering")
+        q.eq("grantor", userId).eq("status", "pending")
       )
       .collect();
 
@@ -323,8 +323,6 @@ export const reserveWish = mutation({
       throw new ConvexError(`Wish for ${wish.name} is already reserved`);
     }
     const updatedWish = await ctx.db.patch(args.wishId, {
-      grantor: user._id,
-      status: "pending",
       updatedAt: Date.now(),
     });
 
@@ -444,23 +442,39 @@ export const setWishStatus = mutation({
 
     const wish = await ctx.db.get(args.wishId);
     if (!wish) {
-      throw new Error("Wish not found");
+      throw new ConvexError("Wish not found");
     }
 
     // check get the people involved in the wish
     const owner = await ctx.db.get(wish.owner);
 
-    // check the other person's details through the chat
-    const chat = await ctx.db
-      .query("chats")
-      .withIndex("by_wish_and_potentialGrantor", (q) =>
-        q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
-      )
-      .first();
+    if (!owner) {
+      throw new ConvexError("Owner not found");
+    }
 
-    let otherUser: Doc<"users"> | null = null;
-    if (chat) {
-      otherUser = await ctx.db.get(chat.potentialGrantor);
+    const isWishOwner = owner && owner._id.toString() === user._id.toString();
+
+    // check the other person's details through the chat
+    let chat: Doc<"chats"> | null = null;
+
+    if (isWishOwner) {
+      chat = await ctx.db
+        .query("chats")
+        .withIndex("by_wish_and_potentialGrantor", (q) =>
+          q.eq("wish", args.wishId)
+        )
+        .first();
+    } else {
+      chat = await ctx.db
+        .query("chats")
+        .withIndex("by_wish_and_potentialGrantor", (q) =>
+          q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
+        )
+        .first();
+    }
+
+    if (!chat) {
+      throw new ConvexError("Chat not found for this wish");
     }
 
     // Check if the user is either the owner or the grantor of the wish
@@ -474,8 +488,8 @@ export const setWishStatus = mutation({
     // only allow if other user is potential grantor
     if (wish.status === "pending" && args.status === "delivering") {
       if (
-        otherUser &&
-        otherUser._id.toString() === chat?.potentialGrantor.toString()
+        chat &&
+        chat.potentialGrantor.toString() === user._id.toString()
       ) {
         const updatedWish = await ctx.db.patch(args.wishId, {
           status: args.status,
@@ -491,15 +505,22 @@ export const setWishStatus = mutation({
       }
     }
     // only allow the owner to mark as completed
-    if (args.status === "delivering") {
+    if (args.status === "completed") {
       if (owner && owner._id.toString() === user._id.toString()) {
         const updatedWish = await ctx.db.patch(args.wishId, {
           status: "completed",
           updatedAt: Date.now(),
         });
+
+        sendSystemMessageHandler(ctx, {
+          chatId: chat._id,
+          content: `The wish "${wish.name}" has been marked as completed by the owner!`,
+          senderId: user._id,
+        });
         return updatedWish;
       }
     }
+    console.log("NO CONDITIONS MET");
   },
 });
 

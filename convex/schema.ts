@@ -32,6 +32,7 @@ export default defineSchema({
     ),
     imageId: v.optional(v.id("_storage")),
   })
+    .index("by_status", ["status"])
     .index("by_owner", ["owner"])
     .index("by_grantor_status", ["grantor", "status"])
     .index("home", ["status", "updatedAt"]),

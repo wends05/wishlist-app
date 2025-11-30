@@ -6,6 +6,7 @@ import type { Id } from "../../../../../../convex/_generated/dataModel";
 
 interface SendMessageComponentProps {
   chatId: Id<"chats">;
+  completed: boolean;
 }
 const defaultValues = {
   content: "",
@@ -13,6 +14,7 @@ const defaultValues = {
 
 export default function SendMessageComponent({
   chatId,
+  completed,
 }: SendMessageComponentProps) {
   const f = useAppForm({
     defaultValues,
@@ -35,13 +37,20 @@ export default function SendMessageComponent({
       }}
       className="fixed bottom-8 flex w-full max-w-md items-center gap-2 pr-4 md:right-auto md:left-auto md:w-full lg:max-w-2xl"
     >
-      <f.AppField name="content">
-        {(field) => <field.FormInput />}
-      </f.AppField>
-
-      <f.AppForm>
-        <f.FormSubmit label="Send" isSubmittingLabel="Sending..." />
-      </f.AppForm>
+      {!completed ? (
+        <>
+          <f.AppField name="content">
+            {(field) => <field.FormInput disabled={completed} />}
+          </f.AppField>
+          <f.AppForm>
+            <f.FormSubmit label="Send" isSubmittingLabel="Sending..." />
+          </f.AppForm>
+        </>
+      ) : (
+        <div className="w-full rounded-md bg-muted/50 p-4 text-center text-muted-foreground text-sm">
+          This wish has been completed. You can no longer send messages.
+        </div>
+      )}
     </form>
   );
 }
