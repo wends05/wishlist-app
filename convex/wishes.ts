@@ -22,14 +22,7 @@ export const getWishById = query({
   args: {
     wishId: v.id("wishes"),
   },
-  handler: async (ctx, args) => {
-    await getCurrentUserData(ctx);
-    const wish = await ctx.db.get(args.wishId);
-    if (!wish) {
-      throw new ConvexError("Wish not found");
-    }
-    return await getWishWithFullDetails(ctx, wish);
-  },
+  handler: (ctx, args) => getWishByIdHandler(ctx, args.wishId),
 });
 
 export const getWishByIdWithCategory = query({
@@ -331,7 +324,7 @@ export const reserveWish = mutation({
     }
     const updatedWish = await ctx.db.patch(args.wishId, {
       grantor: user._id,
-      status: "delivering",
+      status: "pending",
       updatedAt: Date.now(),
     });
 
@@ -460,7 +453,7 @@ export const setWishStatus = mutation({
     // check the other person's details through the chat
     const chat = await ctx.db
       .query("chats")
-      .withIndex("by_wish_and_users", (q) =>
+      .withIndex("by_wish_and_potentialGrantor", (q) =>
         q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
       )
       .first();
@@ -513,13 +506,45 @@ export const setWishStatus = mutation({
 /**
  * Utils
  */
+
+export const getWishByIdHandler = async (
+  ctx: QueryCtx,
+  wishId: Id<"wishes">
+) => {
+  const user = await getCurrentUserData(ctx);
+  const wish = await ctx.db.get(wishId);
+  if (!wish) {
+    throw new ConvexError("Wish not found");
+  }
+
+  // Allow access if user is the owner or the potential grantor
+  const isOwner = wish.owner.toString() === user._id.toString();
+  const isGrantor = wish.grantor?.toString() === user._id.toString();
+
+  // Also check if user is a potential grantor via a chat for this wish
+  const chat = await ctx.db
+    .query("chats")
+    .withIndex("by_wish_and_potentialGrantor", (q) =>
+      q.eq("wish", wishId).eq("potentialGrantor", user._id)
+    )
+    .first();
+
+  const isPotentialGrantorInChat = chat !== null;
+
+  if (!isOwner && !isGrantor && !isPotentialGrantorInChat) {
+    throw new ConvexError("You don't have permission to view this wish");
+  }
+
+  return wish;
+};
+
 const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
   await getCurrentUserData(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };
 
-const getUserWishes = async (ctx: QueryCtx) => {
+export const getUserWishesHandler = async (ctx: QueryCtx) => {
   const userId = await getAuthUserId(ctx);
 
   if (!userId) {
@@ -538,7 +563,7 @@ const getUserWishesByStatus = async (
   ctx: QueryCtx,
   status?: Doc<"wishes">["status"]
 ) => {
-  const userWishes = await getUserWishes(ctx);
+  const userWishes = await getUserWishesHandler(ctx);
 
   const filteredWishes = userWishes.filter((w) => w.status === status);
 
@@ -571,6 +596,7 @@ const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
   };
   return finalWish;
 };
+
 const getWishWithCategoryDetails = async (
   ctx: QueryCtx,
   wish: Doc<"wishes">

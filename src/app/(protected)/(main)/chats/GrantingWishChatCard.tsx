@@ -12,7 +12,7 @@ export default function GrantingWishChatCard({
     <ChatComponent chat={chat}>
       <CardHeader>
         <CardTitle>{chat.wish.name}</CardTitle>
-        <CardDescription>by: {chat.owner}</CardDescription>
+        <CardDescription>by: {chat.owner.name}</CardDescription>
       </CardHeader>
       <ChatComponent.Actions>
         {typeof chat.wish === "string" ? (

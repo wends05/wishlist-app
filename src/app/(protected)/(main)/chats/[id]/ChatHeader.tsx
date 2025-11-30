@@ -10,7 +10,7 @@ export default function ChatHeader({ otherPersonName, wish }: ChatHeaderProps) {
   useChatHeader({
     title: otherPersonName,
     wishId: wish._id,
-    isDelivering: wish.isDelivering,
+    isDelivering: wish.status === "delivering",
   });
 
   return null;

@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useWishOwner from "@/hooks/useWishOwner";
 import { api } from "../../../../../../convex/_generated/api";
 import type { Id } from "../../../../../../convex/_generated/dataModel";
 
@@ -22,6 +23,7 @@ export default function ChatActions({
   wishId,
   isDelivering,
 }: ChatActionsProps) {
+  const { isOwner } = useWishOwner({ wishId });
   const setWishStatus = useMutation(api.wishes.setWishStatus);
   const setWishToDelivering = async () => {
     try {
@@ -42,7 +44,7 @@ export default function ChatActions({
         <DropdownMenuItem>
           <Link href={`/wish/${wishId}`}>Wish Details</Link>
         </DropdownMenuItem>
-        {!isDelivering && (
+        {!isDelivering && !isOwner && (
           <DropdownMenuItem onClick={setWishToDelivering}>
             Set To Delivering
           </DropdownMenuItem>

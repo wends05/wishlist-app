@@ -10,10 +10,14 @@ import ChatActions from "./ChatActions";
 interface UseChatHeaderProps {
   title: string;
   wishId: Id<"wishes">;
-  isDelivering: boolean
+  isDelivering: boolean;
 }
 
-export default function useChatHeader({ title, wishId, isDelivering }: UseChatHeaderProps) {
+export default function useChatHeader({
+  title,
+  wishId,
+  isDelivering,
+}: UseChatHeaderProps) {
   const { setContent } = useHomeHeader();
 
   useEffect(() => {
@@ -23,7 +27,10 @@ export default function useChatHeader({ title, wishId, isDelivering }: UseChatHe
           <ChevronLeft />
         </Link>
         <h3>{title}</h3>
-        <ChatActions wishId={wishId} isDelivering={isDelivering} />
+        <ChatActions
+          wishId={wishId}
+          isDelivering={isDelivering}
+        />
       </>
     );
 

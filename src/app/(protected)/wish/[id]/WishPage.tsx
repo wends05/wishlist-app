@@ -1,6 +1,5 @@
 "use client";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
-import { useRouter } from "next/navigation";
 import ReturnButton from "@/components/ReturnButton";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { api } from "../../../../../convex/_generated/api";

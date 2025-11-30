@@ -47,7 +47,7 @@ export default defineSchema({
     wish: v.id("wishes"),
     createdAt: v.number(),
   })
-    .index("by_wish_and_users", ["wish", "potentialGrantor"])
+    .index("by_wish_and_potentialGrantor", ["wish", "potentialGrantor"])
     .index("by_potentialGrantor", ["potentialGrantor"])
     .index("by_owner", ["owner"])
     .index("by_wish", ["wish"]),
