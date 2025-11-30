@@ -25,6 +25,7 @@ export default defineSchema({
     status: v.optional(
       v.union(
         v.literal("pending"),
+        v.literal("delivering"),
         v.literal("completed"),
         v.literal("cancelled")
       )
@@ -46,7 +47,7 @@ export default defineSchema({
     wish: v.id("wishes"),
     createdAt: v.number(),
   })
-    .index("by_wish_and_users", ["wish", "potentialGrantor"])
+    .index("by_wish_and_potentialGrantor", ["wish", "potentialGrantor"])
     .index("by_potentialGrantor", ["potentialGrantor"])
     .index("by_owner", ["owner"])
     .index("by_wish", ["wish"]),
@@ -54,6 +55,7 @@ export default defineSchema({
     chat: v.id("chats"),
     sender: v.id("users"),
     content: v.string(),
+    isSystemMessage: v.boolean(),
     createdAt: v.number(),
   }).index("by_chat_createdAt", ["chat", "createdAt"]),
   notifications: defineTable({

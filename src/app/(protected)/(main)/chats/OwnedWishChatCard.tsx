@@ -11,7 +11,7 @@ export default function OwnedWishChatCard({
     <ChatComponent chat={chat}>
       <CardHeader>
         <CardTitle>{chat.wish.name}</CardTitle>
-        <CardDescription>grantor: {chat.potentialGrantor}</CardDescription>
+        <CardDescription>grantor: {chat.potentialGrantor.name}</CardDescription>
       </CardHeader>
       <ChatComponent.Actions />
     </ChatComponent>

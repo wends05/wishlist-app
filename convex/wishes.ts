@@ -10,6 +10,7 @@ import {
   type QueryCtx,
   query,
 } from "./_generated/server";
+import { sendSystemMessageHandler } from "./messages";
 import { createNotificationHandler } from "./notifications";
 import { getCurrentUserData } from "./users";
 
@@ -21,14 +22,7 @@ export const getWishById = query({
   args: {
     wishId: v.id("wishes"),
   },
-  handler: async (ctx, args) => {
-    await getCurrentUserData(ctx);
-    const wish = await ctx.db.get(args.wishId);
-    if (!wish) {
-      throw new ConvexError("Wish not found");
-    }
-    return await getWishWithFullDetails(ctx, wish);
-  },
+  handler: (ctx, args) => getWishByIdHandler(ctx, args.wishId),
 });
 
 export const getWishByIdWithCategory = query({
@@ -131,7 +125,7 @@ export const getPendingWishes = query({
       throw new Error("Unauthorized");
     }
 
-    return await getUserWishesByStatus(ctx, "pending");
+    return await getUserWishesByStatus(ctx, "delivering");
   },
 });
 
@@ -188,7 +182,7 @@ export const getReservedWishes = query({
     const wishes = await ctx.db
       .query("wishes")
       .withIndex("by_grantor_status", (q) =>
-        q.eq("grantor", userId).eq("status", "pending")
+        q.eq("grantor", userId).eq("status", "delivering")
       )
       .collect();
 
@@ -436,16 +430,121 @@ export const deleteWish = mutation({
   },
 });
 
+export const setWishStatus = mutation({
+  args: {
+    wishId: v.id("wishes"),
+    status: v.union(
+      v.literal("delivering"),
+      v.literal("completed"),
+      v.literal("")
+    ),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserData(ctx);
+
+    const wish = await ctx.db.get(args.wishId);
+    if (!wish) {
+      throw new Error("Wish not found");
+    }
+
+    // check get the people involved in the wish
+    const owner = await ctx.db.get(wish.owner);
+
+    // check the other person's details through the chat
+    const chat = await ctx.db
+      .query("chats")
+      .withIndex("by_wish_and_potentialGrantor", (q) =>
+        q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
+      )
+      .first();
+
+    let otherUser: Doc<"users"> | null = null;
+    if (chat) {
+      otherUser = await ctx.db.get(chat.potentialGrantor);
+    }
+
+    // Check if the user is either the owner or the grantor of the wish
+    if (
+      wish.owner.toString() !== user._id.toString() &&
+      chat?.potentialGrantor.toString() !== user._id.toString()
+    ) {
+      throw new Error("You are not authorized to update this wish");
+    }
+
+    // only allow if other user is potential grantor
+    if (wish.status === "pending" && args.status === "delivering") {
+      if (
+        otherUser &&
+        otherUser._id.toString() === chat?.potentialGrantor.toString()
+      ) {
+        const updatedWish = await ctx.db.patch(args.wishId, {
+          status: args.status,
+          updatedAt: Date.now(),
+        });
+
+        sendSystemMessageHandler(ctx, {
+          chatId: chat._id,
+          content: `The wish "${wish.name}" is now being delivered!`,
+          senderId: user._id,
+        });
+        return updatedWish;
+      }
+    }
+    // only allow the owner to mark as completed
+    if (args.status === "delivering") {
+      if (owner && owner._id.toString() === user._id.toString()) {
+        const updatedWish = await ctx.db.patch(args.wishId, {
+          status: "completed",
+          updatedAt: Date.now(),
+        });
+        return updatedWish;
+      }
+    }
+  },
+});
+
 /**
  * Utils
  */
+
+export const getWishByIdHandler = async (
+  ctx: QueryCtx,
+  wishId: Id<"wishes">
+) => {
+  const user = await getCurrentUserData(ctx);
+  const wish = await ctx.db.get(wishId);
+  if (!wish) {
+    throw new ConvexError("Wish not found");
+  }
+
+  // Allow access if user is the owner or the potential grantor
+  const isOwner = wish.owner.toString() === user._id.toString();
+  const isGrantor = wish.grantor?.toString() === user._id.toString();
+
+  // Also check if user is a potential grantor via a chat for this wish
+  const chat = await ctx.db
+    .query("chats")
+    .withIndex("by_wish_and_potentialGrantor", (q) =>
+      q.eq("wish", wishId).eq("potentialGrantor", user._id)
+    )
+    .first();
+
+  const isPotentialGrantorInChat = chat !== null;
+
+  if (!isOwner && !isGrantor && !isPotentialGrantorInChat) {
+    throw new ConvexError("You don't have permission to view this wish");
+  }
+
+  return wish;
+};
+
 const getImageURL = async (ctx: QueryCtx, imageId: Id<"_storage">) => {
   await getCurrentUserData(ctx);
   const url = await ctx.storage.getUrl(imageId);
   return url;
 };
 
-const getUserWishes = async (ctx: QueryCtx) => {
+export const getUserWishesHandler = async (ctx: QueryCtx) => {
   const userId = await getAuthUserId(ctx);
 
   if (!userId) {
@@ -464,7 +563,7 @@ const getUserWishesByStatus = async (
   ctx: QueryCtx,
   status?: Doc<"wishes">["status"]
 ) => {
-  const userWishes = await getUserWishes(ctx);
+  const userWishes = await getUserWishesHandler(ctx);
 
   const filteredWishes = userWishes.filter((w) => w.status === status);
 
@@ -497,6 +596,7 @@ const getWishWithFullDetails = async (ctx: QueryCtx, wish: Doc<"wishes">) => {
   };
   return finalWish;
 };
+
 const getWishWithCategoryDetails = async (
   ctx: QueryCtx,
   wish: Doc<"wishes">

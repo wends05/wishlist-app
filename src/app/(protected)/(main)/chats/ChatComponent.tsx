@@ -1,11 +1,10 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Chat } from "@/types/Chat";
-import { Card, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
 
 interface ChatItemContextValue {
   chat: Chat;
@@ -41,6 +40,14 @@ function ChatComponentRoot({
   );
 }
 
+export function ChatStatus() {
+  const { chat } = useChatItem();
+  
+  return (
+    typeof chat.wish === "object" && chat.wish.status 
+  );
+}
+
 interface ChatActionsProps {
   children?: React.ReactNode;
 }
@@ -62,4 +69,5 @@ function ChatActions({ children }: ChatActionsProps) {
 
 export const ChatComponent = Object.assign(ChatComponentRoot, {
   Actions: ChatActions,
+  Status: ChatStatus,
 });

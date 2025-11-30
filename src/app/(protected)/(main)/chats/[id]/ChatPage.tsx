@@ -40,20 +40,20 @@ export default function ChatPage({ preloadedChat }: ChatPageProps) {
       </div>
     );
   }
+  const otherPersonName =
+    user._id === chat.owner._id ? chat.potentialGrantor.name : chat.owner.name;
 
-  if (!chat.ownerName || !chat.potentialGrantorName) {
+  if (!chat.owner || !chat.potentialGrantor || !otherPersonName) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <p>Chat not found.</p>
       </div>
     );
   }
-  const otherPersonName =
-    user._id === chat.owner ? chat.potentialGrantorName : chat.ownerName;
 
   return (
     <>
-      <ChatHeader otherPersonName={otherPersonName} />
+      <ChatHeader otherPersonName={otherPersonName} wish={chat.wish} />
       <div className="flex h-full flex-col items-center space-y-3">
         <div className="flex min-h-0 w-full max-w-3xl flex-1 flex-col">
           <MessageList

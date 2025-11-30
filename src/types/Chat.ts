@@ -12,4 +12,12 @@ export type OwnedWishChatCard = FunctionReturnType<
   typeof api.chats.getOwnedWishChats
 >[number];
 
-export type Chat = BaseChat | GrantingWishChatCard | OwnedWishChatCard;
+export type ChatDetails = FunctionReturnType<
+  typeof api.chats.getChatPageDetails
+>;
+
+export type Chat =
+  | BaseChat
+  | GrantingWishChatCard
+  | OwnedWishChatCard
+  | ChatDetails;

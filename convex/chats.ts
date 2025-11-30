@@ -2,43 +2,9 @@ import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserData } from "./users";
 
-export const getChatSessionId = mutation({
-  args: { wishId: v.id("wishes") },
-  handler: async (ctx, args) => {
-    const user = await getCurrentUserData(ctx);
-
-    const wish = await ctx.db.get(args.wishId);
-    if (!wish) {
-      throw new Error("Wish not found");
-    }
-
-    // check if session between these users for this wish already exists
-    const existingChat = await ctx.db
-      .query("chats")
-      .withIndex("by_wish_and_users", (q) =>
-        q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
-      )
-      .unique();
-
-    if (existingChat) {
-      return {
-        chatSessionId: existingChat._id,
-        created: false,
-      };
-    }
-
-    // create a new chat session
-    const newChatId = await ctx.db.insert("chats", {
-      potentialGrantor: user._id,
-      owner: wish.owner,
-      wish: args.wishId,
-      createdAt: Date.now(),
-    });
-
-    return { chatSessionId: newChatId, created: true };
-  },
-});
-
+/**
+ * Queries
+ */
 export const getGrantingWishChats = query({
   args: {},
   handler: async (ctx) => {
@@ -53,7 +19,9 @@ export const getGrantingWishChats = query({
 
     return await Promise.all(
       chats.map(async (chat) => {
-        const owner = await ctx.db.get(chat.owner);
+        const owner = await ctx.db
+          .get(chat.wish)
+          .then((wish) => (wish ? ctx.db.get(wish.owner) : null));
         if (!owner) {
           throw new Error("Owner not found");
         }
@@ -65,10 +33,14 @@ export const getGrantingWishChats = query({
 
         return {
           ...chat,
-          owner: owner.name,
+          owner: {
+            _id: owner._id,
+            name: owner.name,
+          },
           wish: {
             _id: wish._id,
             name: wish.name,
+            status: wish.status,
           },
         };
       })
@@ -98,10 +70,15 @@ export const getOwnedWishChats = query({
         }
         return {
           ...chat,
-          potentialGrantor: potentialGrantor.name,
+          potentialGrantor: {
+            _id: potentialGrantor._id,
+            name: potentialGrantor.name,
+          },
           wish: {
             _id: wish._id,
             name: wish.name,
+            owner: wish.owner,
+            status: wish.status,
           },
         };
       })
@@ -118,7 +95,12 @@ export const getChatPageDetails = query({
       throw new ConvexError("Chat not found");
     }
 
-    const owner = await ctx.db.get(chat.owner);
+    const wish = await ctx.db.get(chat.wish);
+    if (!wish) {
+      throw new ConvexError("Wish not found");
+    }
+
+    const owner = await ctx.db.get(wish.owner);
     const potentialGrantor = await ctx.db.get(chat.potentialGrantor);
 
     if (!owner || !potentialGrantor) {
@@ -127,8 +109,59 @@ export const getChatPageDetails = query({
 
     return {
       ...chat,
-      ownerName: owner.name,
-      potentialGrantorName: potentialGrantor.name,
+      owner: {
+        _id: owner._id,
+        name: owner.name,
+      },
+      potentialGrantor: {
+        _id: potentialGrantor._id,
+        name: potentialGrantor.name,
+      },
+      wish: {
+        _id: wish._id,
+        owner: wish.owner,
+        status: wish.status,
+      },
     };
+  },
+});
+
+/**
+ * Mutations
+ */
+export const getChatSessionId = mutation({
+  args: { wishId: v.id("wishes") },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUserData(ctx);
+
+    const wish = await ctx.db.get(args.wishId);
+    if (!wish) {
+      throw new Error("Wish not found");
+    }
+
+    // check if session between these users for this wish already exists
+    const existingChat = await ctx.db
+      .query("chats")
+      .withIndex("by_wish_and_potentialGrantor", (q) =>
+        q.eq("wish", args.wishId).eq("potentialGrantor", user._id)
+      )
+      .unique();
+
+    if (existingChat) {
+      return {
+        chatSessionId: existingChat._id,
+        created: false,
+      };
+    }
+
+    // create a new chat session
+    const newChatId = await ctx.db.insert("chats", {
+      potentialGrantor: user._id,
+      wish: args.wishId,
+      owner: wish.owner,
+      createdAt: Date.now(),
+    });
+
+    return { chatSessionId: newChatId, created: true };
   },
 });
