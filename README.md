@@ -29,7 +29,7 @@ A modern web application for creating, sharing, and granting wishes. Users can c
 ### Prerequisites
 
 - Node.js 18+
-- npm or pnpm
+- bun
 - Convex account
 
 ### Installation
@@ -42,20 +42,18 @@ A modern web application for creating, sharing, and granting wishes. Users can c
 
 2. Install dependencies:
    ```bash
-   npm install
+   bun install
    ```
 
-3. Set up Convex:
+3. Set up Convex. environment variables will be set automatically:
    ```bash
    npx convex dev
    ```
 
-4. Configure environment variables:
-   Create a `.env.local` file with your Convex deployment URL and auth credentials.
 
 5. Run the development server:
    ```bash
-   npm run dev
+   bun dev
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -64,11 +62,11 @@ A modern web application for creating, sharing, and granting wishes. Users can c
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server with Turbopack |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run Biome linter |
-| `npm run format` | Format code with Biome |
+| `bun run dev` | Start development server with Turbopack |
+| `bun run build` | Build for production |
+| `bun run start` | Start production server |
+| `bun run lint` | Run Biome linter |
+| `bun run format` | Format code with Biome |
 
 ## Project Structure
 
