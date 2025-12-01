@@ -2,10 +2,6 @@ import type NavLink from "@/types/NavLink";
 
 export const rootLinks: NavLink[] = [
   {
-    href: "/about",
-    label: "About",
-  },
-  {
     href: "/auth",
     label: "Get Started",
   },

@@ -15,12 +15,6 @@ const Footer = () => {
             <Link href="/" className="transition-colors hover:text-foreground">
               Home
             </Link>
-            <Link
-              href="/about"
-              className="transition-colors hover:text-foreground"
-            >
-              About
-            </Link>
           </nav>
 
           <p className="text-muted-foreground text-sm">
